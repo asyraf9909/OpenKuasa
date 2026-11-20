@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { checkVideo } from '@/lib/agents/openrouter-media';
+import { checkVideo } from '@/lib/agents/ai-media';
 import { readWorkspaceKey } from '@/lib/ai/workspace-key';
 import { workspaceSpendCents } from '@/lib/agents/spend';
 import { runAgent, type AgentRunResult } from '@/lib/agents/run-agent';

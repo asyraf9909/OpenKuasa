@@ -25,7 +25,7 @@ describe('docs content', () => {
     const guides = getAllGuides();
     expect(guides.length).toBeGreaterThanOrEqual(2);
     expect(new Set(guides.map((g) => g.url)).size).toBe(guides.length);
-    expect(getGuide('getting-started', 'openrouter-key')?.ask).toBe('How do I add my OpenRouter key?');
+    expect(getGuide('getting-started', 'ai-key')?.ask).toBe('How do I add my AI key?');
   });
 
   test('no guide names a slug "ask" and no copy uses purple or violet', () => {

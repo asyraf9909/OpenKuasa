@@ -10,7 +10,7 @@ describe('cachedInstructions', () => {
     expect(cachedInstructions('You are Tuah.')).toEqual({
       role: 'system',
       content: 'You are Tuah.',
-      providerOptions: { openrouter: { cacheControl: { type: 'ephemeral' } } },
+      providerOptions: { openaiCompatible: { cacheControl: { type: 'ephemeral' } } },
     });
   });
 
@@ -23,7 +23,7 @@ describe('cachedInstructions', () => {
 describe('cachedInstructions, for a prompt that ends with the time of day', () => {
   const FIXED = 'You are Kasturi.\n\nRULES\n- One rule.';
   const TODAY = 'TODAY\n- It is Tuesday, 2026-10-13, 09:41 in Malaysia (UTC+8).';
-  const mark = { openrouter: { cacheControl: { type: 'ephemeral' } } };
+  const mark = { openaiCompatible: { cacheControl: { type: 'ephemeral' } } };
 
   it('marks the fixed part and leaves the dated part out of the cache, in that order', () => {
     expect(cachedInstructions(`${FIXED}\n\n${TODAY}`, FIXED)).toEqual([
@@ -71,11 +71,11 @@ describe('logModelCall', () => {
     );
   });
 
-  it('names the provider OpenRouter sent the call to, since each provider keeps its own cache', () => {
+  it('names the model that served the call, as the proxy reports it', () => {
     const info = vi.spyOn(console, 'info').mockImplementation(() => {});
-    logModelCall('lekir', 'fallback')({ ...call({ cacheReadTokens: 0, cacheWriteTokens: 4600 }), providerMetadata: { openrouter: { provider: 'Amazon Bedrock' } } });
+    logModelCall('lekir', 'fallback')({ ...call({ cacheReadTokens: 0, cacheWriteTokens: 4600 }), modelId: 'anthropic/claude-haiku-4.5' });
     expect(info).toHaveBeenCalledWith(
-      '[ai] agent=lekir model=anthropic/claude-sonnet-4.6 provider=Amazon_Bedrock ms=1234 in=5000 cached=0 wrote=4600 out=120 finish=stop',
+      '[ai] agent=lekir model=anthropic/claude-haiku-4.5 ms=1234 in=5000 cached=0 wrote=4600 out=120 finish=stop',
     );
   });
 

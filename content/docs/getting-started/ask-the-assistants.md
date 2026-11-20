@@ -29,7 +29,7 @@ Every signed-in person, whatever their role. In the demo workspace the assistant
 
 ## Free questions
 
-Until your workspace adds its own OpenRouter key, each person gets 3 free questions a week. They are shared across all the assistants. They reset every Monday at 00:00 UTC.
+Until your workspace adds its own AI key, each person gets 3 free questions a week. They are shared across all the assistants. They reset every Monday at 00:00 UTC.
 
 Each chat shows how many are left, for example **2 of 3 free questions left this week.**
 
@@ -38,16 +38,16 @@ A free question also has limits:
 - The assistant only sees the last few messages of the chat.
 - It can carry one small file, up to 2 MB.
 
-When the free questions are used up, chat stops until next week, or until an owner or admin adds a key. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+When the free questions are used up, chat stops until next week, or until an owner or admin adds a key. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Common problems
 
-- **You have used your 3 free questions this week.** Wait until next week, or ask an owner or admin to add an OpenRouter key.
-- **Ask a workspace owner or admin to add an OpenRouter key to keep chatting.** Members and viewers cannot add the key themselves.
-- **A free question can carry one small file (up to 2 MB). Add your OpenRouter key to attach more.** Send a smaller file, or one file at a time.
+- **You have used your 3 free questions this week.** Wait until next week, or ask an owner or admin to add an AI key.
+- **Ask a workspace owner or admin to add an AI key to keep chatting.** Members and viewers cannot add the key themselves.
+- **A free question can carry one small file (up to 2 MB). Add your AI key to attach more.** Send a smaller file, or one file at a time.
 - **Sign up free to chat with …** You are in the demo. Sign up to get real answers.
 
 ## Related
 
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)
 - [Try the demo](/docs/getting-started/try-the-demo)

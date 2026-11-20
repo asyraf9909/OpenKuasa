@@ -1460,7 +1460,7 @@ this order, each refusal costing nothing and sending nothing:
 4. asks as the caller whether the workspace has an AI key
    (`org_ai_key_status`), then opens the sealed key on the server for the
    session's own workspace (`readWorkspaceKey`). **The workspace's own key
-   or nothing**: the platform's key (`OPENROUTER_API_KEY`) and the free chat
+   or nothing**: the platform's key (`LITELLM_API_KEY`) and the free chat
    questions (`consume_free_question`) are never used for a receipt, so a
    workspace with no key is told to add one whether or not the person has
    free questions left;
@@ -3105,13 +3105,13 @@ with no date).
   shared with chat. What is not: a PDF's pages are not counted, so a
   many-page PDF under 4 MB costs more input than a photo, and a workspace
   has no ceiling of its own across its people. How well the configured model reads a
-  Malaysian receipt is the model's. A PDF is read only by a model that takes
-  PDFs natively: the request names OpenRouter's `native` file-parser engine
-  (`RECEIPT_PDF_ENGINE`), so OpenRouter's own parsers, one of which is billed
-  per page even when the model is free, are never used. A model without PDF
-  input answers with an error (400, 404 or 422, also when it comes in the body
-  of a 200), told as "The AI model chosen on this server did not accept this
-  file…" with nothing written. A busy or unreachable provider is told as
+  Malaysian receipt is the model's. A PDF goes to the model as its own file
+  part (the OpenAI-compatible `file` content with `file_data`), and LiteLLM
+  hands it to a model that takes PDFs natively; no OCR parser is named, so a
+  parser billed per page is never used. A model without PDF input answers with
+  an error (400, 404 or 422, also when it comes in the body of a 200), told as
+  "The AI model chosen on this server did not accept this file…" with nothing
+  written. A busy or unreachable provider is told as
   "could not do the reading just now", and an answer that is not the five
   fields as "nothing could be read".
 - A reading's answer is shown only if the person still has that receipt's

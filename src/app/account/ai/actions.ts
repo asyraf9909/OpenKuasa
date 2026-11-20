@@ -9,28 +9,33 @@ import { can } from '@/lib/auth/permissions';
 import {
   encryptApiKey,
   hasKeySecret,
-  isOpenRouterKeyShape,
+  isProviderKeyShape,
   keyHint,
 } from '@/lib/ai/key-crypto';
 import { getChatStatus, type ChatStatus } from '@/lib/ai/gate';
+import { providerBaseUrl } from '@/lib/ai/provider';
 import type { SettingsState } from '@/app/account/actions';
 
 const DEMO_ERROR = 'The demo workspace is read-only. Sign up to save changes.';
 const ROLE_ERROR = 'Only owners and admins can manage the workspace AI key.';
 const SAVE_ERROR = 'Could not save the key. Please try again.';
-const KEY_CHECK_URL ='https://openrouter.ai/api/v1/key';
 
 const keySchema = z
   .string()
   .trim()
-  .refine(isOpenRouterKeyShape, 'That does not look like an OpenRouter key. It should start with sk-or-.');
+  .refine(isProviderKeyShape, 'That does not look like an AI key. It should start with sk-.');
 
-/** Asks OpenRouter whether the key is real. Never logs the key. */
-async function checkWithOpenRouter(
+/**
+ * Asks the LiteLLM proxy whether the key is real, by listing the models it may
+ * use (`GET /models`, which a virtual key answers with its own list). Never
+ * logs the key. A proxy that answers anything but 401/403 is treated as
+ * reachable: only a refusal is taken as "this key is wrong".
+ */
+async function checkWithProvider(
   apiKey: string,
 ): Promise<'valid' | 'invalid' | 'unreachable'> {
   try {
-    const response = await fetch(KEY_CHECK_URL, {
+    const response = await fetch(`${providerBaseUrl()}/models`, {
       headers: { Authorization: `Bearer ${apiKey}` },
       cache: 'no-store',
       signal: AbortSignal.timeout(8000),
@@ -76,12 +81,12 @@ export async function saveAiKeyAction(
     };
   }
 
-  const check = await checkWithOpenRouter(apiKey);
+  const check = await checkWithProvider(apiKey);
   if (check === 'invalid') {
-    return { error: 'OpenRouter rejected that key. Check it and try again.' };
+    return { error: 'The AI server rejected that key. Check it and try again.' };
   }
   if (check === 'unreachable') {
-    return { error: 'Could not reach OpenRouter to check the key. Please try again.' };
+    return { error: 'Could not reach the AI server to check the key. Please try again.' };
   }
 
   // The server is the only writer of a sealed key. It seals for the workspace
@@ -103,7 +108,7 @@ export async function saveAiKeyAction(
   }
 
   revalidatePath('/', 'layout');
-  return { notice: 'Key saved. Chat now runs on your OpenRouter account.' };
+  return { notice: 'Key saved. Chat now runs on your AI key.' };
 }
 
 export async function removeAiKeyAction(

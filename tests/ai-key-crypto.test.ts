@@ -5,13 +5,13 @@ import {
   encryptApiKey,
   hasKeySecret,
   isLegacySealed,
-  isOpenRouterKeyShape,
+  isProviderKeyShape,
   keyHint,
 } from '@/lib/ai/key-crypto';
 
 const secret = 'a-server-only-secret-of-32-characters-or-more';
 const env = { AI_KEYS_ENCRYPTION_SECRET: secret };
-const key = 'sk-or-v1-0123456789abcdef0123456789abcdef';
+const key = 'sk-0123456789abcdef0123456789abcdef';
 const ORG_A = '11111111-1111-4111-8111-111111111111';
 const ORG_B = '22222222-2222-4222-8222-222222222222';
 
@@ -95,10 +95,12 @@ test('a missing or short secret means keys cannot be stored', () => {
   expect(decryptApiKey(encryptApiKey(key, ORG_A, env), ORG_A, {})).toBeNull();
 });
 
-test('recognises OpenRouter keys and only ever shows the last four characters', () => {
-  expect(isOpenRouterKeyShape(key)).toBe(true);
-  expect(isOpenRouterKeyShape(`  ${key}  `)).toBe(true);
-  expect(isOpenRouterKeyShape('sk-ant-abcdefghijklmnopqrstuvwxyz')).toBe(false);
-  expect(isOpenRouterKeyShape('sk-or-short')).toBe(false);
-  expect(keyHint(key)).toBe('sk-or-…cdef');
+test('recognises an AI server key and only ever shows the last four characters', () => {
+  expect(isProviderKeyShape(key)).toBe(true);
+  expect(isProviderKeyShape(`  ${key}  `)).toBe(true);
+  expect(isProviderKeyShape('sk-short')).toBe(false);
+  expect(isProviderKeyShape('pk-abcdefghijklmnopqrstuvwxyz')).toBe(false);
+  // A LiteLLM master key and a virtual key are both `sk-`; the proxy decides which.
+  expect(isProviderKeyShape('sk-0123456789abcdef0123456789abcdef')).toBe(true);
+  expect(keyHint(key)).toBe('sk-…cdef');
 });

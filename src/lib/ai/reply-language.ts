@@ -19,7 +19,7 @@
  *   the instructions saying what the bracketed line is. When it is not clear (`either`) the request is not touched.
  *
  * Why inside the user's message and not as a later system message: the AI SDK refuses a system message among the
- * conversation's messages unless asked (`allowSystemInMessages`), the OpenRouter provider would then send it in
+ * conversation's messages unless asked (`allowSystemInMessages`), the OpenAI-compatible provider would then send it in
  * place, but the model behind it may have no such place: Anthropic's API takes instructions as one separate field,
  * not as a turn, so a system message cannot stay beside the latest message there, and where the router puts it
  * instead is not ours to rely on. The text of the newest user message is the one place every provider keeps where

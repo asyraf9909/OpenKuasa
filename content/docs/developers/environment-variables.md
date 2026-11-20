@@ -30,7 +30,7 @@ Never put a secret in a file you commit or share. `SUPABASE_SERVICE_ROLE_KEY` an
 | Variable | What it is for |
 | --- | --- |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only work: scheduled agents, file clean-ups, reading a workspace's stored keys, and test clean-up. Never expose it to the browser. |
-| `AI_KEYS_ENCRYPTION_SECRET` | 32+ characters. Seals each workspace's OpenRouter and Resend keys, and the sessions behind MCP API keys. Without it a workspace cannot save its own keys. It also signs the unsubscribe links in Kasturi broadcasts, so broadcasts can't send without it. Use the same value on every host: changing it makes stored keys unreadable and breaks the unsubscribe links in broadcasts already sent. |
+| `AI_KEYS_ENCRYPTION_SECRET` | 32+ characters. Seals each workspace's AI and Resend keys, and the sessions behind MCP API keys. Without it a workspace cannot save its own keys. It also signs the unsubscribe links in Kasturi broadcasts, so broadcasts can't send without it. Use the same value on every host: changing it makes stored keys unreadable and breaks the unsubscribe links in broadcasts already sent. |
 | `AUTH_COOKIE_SECRET` | Optional, 32+ characters. Signs the short-lived cookie a password-reset link leaves. Without it the app uses a key made from `AI_KEYS_ENCRYPTION_SECRET`, or else a random key made when the server starts. |
 | `RATE_LIMIT_PEPPER` | Keys the hashes the rate limiter stores, so they cannot be tested against guesses. |
 
@@ -38,11 +38,11 @@ Never put a secret in a file you commit or share. `SUPABASE_SERVICE_ROLE_KEY` an
 
 | Variable | What it is for |
 | --- | --- |
-| `OPENROUTER_API_KEY` | Optional. The platform key behind the 3 free questions a week for people whose workspace has no key of its own. |
-| `OPENKUASA_MODEL_ORCHESTRATOR`, `OPENKUASA_MODEL_WORKER` | The models for Tuah and its specialists, as OpenRouter model ids. |
+| `LITELLM_BASE_URL` | Where the LiteLLM proxy is. A host alone (`http://litellm:4000`) gets `/v1` added; a full path is used as given. Defaults to `http://localhost:4000`. |
+| `LITELLM_API_KEY` | Optional. The platform key behind the 3 free questions a week for people whose workspace has no key of its own: the proxy's master key, or a virtual key for the platform's spend. |
+| `OPENKUASA_MODEL_ORCHESTRATOR`, `OPENKUASA_MODEL_WORKER` | The models for Tuah and its specialists, as names your LiteLLM `model_list` holds. |
 | `OPENKUASA_MODEL_RECEIPTS` | The model that reads receipts in the Receipts Inbox. Without it, the worker model is used. |
 | `OPENKUASA_MODEL_AGENT_SEARCH`, `OPENKUASA_MODEL_AGENT_DIGEST`, `OPENKUASA_MODEL_AGENT_IMAGE`, `OPENKUASA_MODEL_AGENT_VIDEO` | Override the models for the Weekly Studio agent's steps. |
-| `AI_GATEWAY_BASE_URL` | Optional gateway in front of OpenRouter. |
 
 ### Scheduled jobs and agents
 

@@ -24,8 +24,8 @@ const search = (query: string) =>
 
 describe('searchDocs', () => {
   test('returns guide passages inside /docs', async () => {
-    const out = await search('add openrouter key');
-    expect(out.results[0].url).toMatch(/^\/docs\/getting-started\/openrouter-key/);
+    const out = await search('add ai key');
+    expect(out.results[0].url).toMatch(/^\/docs\/getting-started\/ai-key/);
     expect(out.results.length).toBeLessThanOrEqual(4);
   });
 
@@ -94,24 +94,24 @@ describe('reply text links /docs paths and nothing else', () => {
   const html = (text: string) => renderToStaticMarkup(<ReplyText text={text} />);
 
   test('a /docs path is a link; a full URL stays text', () => {
-    const out = html('See /docs/getting-started/openrouter-key and https://evil.com');
+    const out = html('See /docs/getting-started/ai-key and https://evil.com');
     expect(out.match(/<a /g)).toHaveLength(1);
-    expect(out).toContain('href="/docs/getting-started/openrouter-key">/docs/getting-started/openrouter-key</a>');
+    expect(out).toContain('href="/docs/getting-started/ai-key">/docs/getting-started/ai-key</a>');
     expect(out).not.toContain('href="https://evil.com"');
     expect(out).toContain('https://evil.com');
   });
 
   test('keeps an #id, stops at trailing punctuation', () => {
-    const out = html('Steps: /docs/getting-started/openrouter-key#add-the-key.');
-    expect(out).toContain('href="/docs/getting-started/openrouter-key#add-the-key"');
+    const out = html('Steps: /docs/getting-started/ai-key#add-the-key.');
+    expect(out).toContain('href="/docs/getting-started/ai-key#add-the-key"');
     expect(out).toContain('</a>.');
   });
 
   test('no link while the reply is still arriving, and no prefetch once it is', () => {
-    const text = 'See /docs/getting-started/openrouter-key';
+    const text = 'See /docs/getting-started/ai-key';
     expect(renderToStaticMarkup(<ReplyText text={text} arriving />)).not.toContain('<a');
     expect(renderToStaticMarkup(<ReplyText text={`**Key**\n${text}`} arriving />)).not.toContain('<a');
-    expect(html(text)).toContain('href="/docs/getting-started/openrouter-key"');
+    expect(html(text)).toContain('href="/docs/getting-started/ai-key"');
   });
 
   test('links inside a marked reply too', () => {
@@ -122,9 +122,9 @@ describe('reply text links /docs paths and nothing else', () => {
 
   test('not a link: a path glued to a word, other paths, a deeper path, uppercase', () => {
     for (const text of [
-      'x/docs/getting-started/openrouter-key',
+      'x/docs/getting-started/ai-key',
       'go to /account/ai',
-      'https://openkuasa.com/docs/getting-started/openrouter-key',
+      'https://openkuasa.com/docs/getting-started/ai-key',
       '/docs/a/b/c',
       '/docs/Getting/Started',
       '/docs//evil.com',

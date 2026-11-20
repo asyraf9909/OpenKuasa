@@ -90,7 +90,7 @@ describe('the card’s header', () => {
 describe('how the screen is kept safe', () => {
   it('nothing on the screen reaches for the platform’s key, the free questions or a model', () => {
     for (const file of [CARD, VIEW, LOADER, MATCH_CARDS, REVIEW_CARD]) {
-      expect(read(file), file).not.toMatch(/OPENROUTER_API_KEY|consume_free_question|resolveChatAccess|getModel\(|pickModelId|hasProviderKey|generateText|streamText/);
+      expect(read(file), file).not.toMatch(/LITELLM_API_KEY|consume_free_question|resolveChatAccess|getModel\(|pickModelId|hasProviderKey|generateText|streamText/);
     }
   });
 

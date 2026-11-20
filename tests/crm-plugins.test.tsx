@@ -29,7 +29,7 @@ describe('Kasturi Plugins', () => {
     const out = html(
       <PluginsView connections={{ hasAiKey: false, emailSender: 'hi@shop.my', pagesWithChat: null, automationsOn: 3 }} />,
     );
-    expect(out).toContain('AI key (OpenRouter)');
+    expect(out).toContain('AI key');
     expect(out).toContain('Not set');
     expect(out).toContain('href="/account/ai"');
     expect(out).toContain('Add a key');

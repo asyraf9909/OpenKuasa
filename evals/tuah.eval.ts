@@ -42,7 +42,7 @@ const ready =
   !!account &&
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-  !!process.env.OPENROUTER_API_KEY;
+  !!(process.env.LITELLM_API_KEY || process.env.OPENAI_API_KEY);
 
 type Run = { pass: boolean; failed: Check[]; error?: string; unscored?: true };
 type Result = { id: string; about: string; runs: Run[] };
@@ -106,7 +106,7 @@ afterAll(async () => {
 const run = ready ? test : test.skip;
 if (!ready) {
   console.warn(
-    'Tuah accuracy check skipped: it needs .env.local (Supabase and OPENROUTER_API_KEY) and an eval account.',
+    'Tuah accuracy check skipped: it needs .env.local (Supabase and LITELLM_API_KEY) and an eval account.',
   );
 }
 

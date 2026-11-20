@@ -3,7 +3,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 const ORG_A = '11111111-1111-4111-8111-111111111111';
 const ORG_B = '22222222-2222-4222-8222-222222222222';
-const key = 'sk-or-v1-0123456789abcdef0123456789abcdef';
+const key = 'sk-0123456789abcdef0123456789abcdef';
 
 const ctl = vi.hoisted(() => ({
   /** The workspace the session resolves to, or null (none, or a second factor is owed). */
@@ -87,7 +87,7 @@ afterEach(() => {
 });
 
 const withKey = (sealedFor: string, storedIn = ORG_A) => {
-  ctl.statusRows = [{ key_hint: 'sk-or-…cdef' }];
+  ctl.statusRows = [{ key_hint: 'sk-…cdef' }];
   ctl.stored = { [storedIn]: encryptApiKey(key, sealedFor) };
 };
 

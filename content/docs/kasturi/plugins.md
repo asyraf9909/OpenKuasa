@@ -15,7 +15,7 @@ Everyone in the workspace can open Plugins. Each connection is set up on the scr
 
 1. Open **Kasturi** and choose **Plugins**.
 2. Under **Connected services**, check each row:
-   - **AI key (OpenRouter)**: **Set** or **Not set**. It links to the AI key page in your account.
+   - **AI key**: **Set** or **Not set**. It links to the AI key page in your account.
    - **Email sending (Resend)**: the address broadcasts are sent from, or **Not set**. It links to Broadcast.
    - **Chatbot on landing pages**: how many published pages show the chatbot, or **Off**. It links to AI Chatbot.
    - **Automations**: how many automations are switched on, or **None on**. It links to Automations.
@@ -41,7 +41,7 @@ These are listed so you do not look for a switch that is not there. There is not
 
 ## Related
 
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)
 - [Set up email sending](/docs/kasturi/email-sending)
 - [Set up the AI chatbot](/docs/kasturi/ai-chatbot)
 - [Automations](/docs/kasturi/automations)

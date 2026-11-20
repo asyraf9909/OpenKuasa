@@ -34,7 +34,7 @@ Everyone in the workspace can open the overview: owners, admins, members and vie
 - **"Ad engine health" and "Best time to engage" say "Not available yet".** These cards are not built for your own workspace yet. Only the demo shows sample figures in them.
 - **A card says "No leads yet" or "No campaigns yet".** Add a lead in [Lead Funnel](/docs/jebat/lead-funnel) or a campaign in [Ad Studio](/docs/jebat/ad-studio), and the cards fill in.
 - **"Couldn't load your dashboard — please refresh".** Jebat could not read your data. Refresh the page.
-- **Jebat stops answering.** Without your own AI key, each person gets a few free questions a week. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+- **Jebat stops answering.** Without your own AI key, each person gets a few free questions a week. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Related
 

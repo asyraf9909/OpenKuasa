@@ -19,7 +19,7 @@ const state = vi.hoisted(() => ({
   isDemo: false,
   config: null as unknown,
   configError: null as unknown,
-  keyRows: [{ provider: 'openrouter' }] as unknown,
+  keyRows: [{ provider: 'litellm' }] as unknown,
   pending: [] as unknown[],
   notes: [] as unknown,
   pendingProducts: [] as (string | undefined)[],
@@ -140,7 +140,7 @@ beforeEach(() => {
   state.isDemo = false;
   state.config = CONFIRMED;
   state.configError = null;
-  state.keyRows = [{ provider: 'openrouter' }];
+  state.keyRows = [{ provider: 'litellm' }];
   state.pending = [PROPOSAL];
   state.notes = [NOTE];
   state.pendingProducts = [];
@@ -231,7 +231,7 @@ describe('the Lekir Agents screen', () => {
 
   it('asks for a key when the workspace has none', async () => {
     state.keyRows = [];
-    expect(text(await render())).toContain('Add an OpenRouter key');
+    expect(text(await render())).toContain('Add your AI key');
   });
 
   it('shows its own header and a message when the agent cannot be read', async () => {

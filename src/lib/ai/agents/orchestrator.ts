@@ -103,7 +103,7 @@ export function runJebat(
   messages: ModelMessage[],
   reach: ReachAccess,
   abortSignal?: AbortSignal,
-  /** A workspace's own OpenRouter key; omitted for platform-paid turns. */
+  /** A workspace's own AI key; omitted for platform-paid turns. */
   apiKey?: string,
   /** Where proposed changes are kept; a chat route passes its own. */
   approvals?: ApprovalBinding,
@@ -135,7 +135,7 @@ export function runKasturi(
   crm: CrmAccess,
   reach: ReachAccess,
   abortSignal?: AbortSignal,
-  /** A workspace's own OpenRouter key; omitted for platform-paid turns. */
+  /** A workspace's own AI key; omitted for platform-paid turns. */
   apiKey?: string,
   /** Where proposed changes are kept; a chat route passes its own. */
   approvals?: ApprovalBinding,
@@ -166,7 +166,7 @@ export function runLekir(
   messages: ModelMessage[],
   hire: HireAccess,
   abortSignal?: AbortSignal,
-  /** A workspace's own OpenRouter key; omitted for platform-paid turns. */
+  /** A workspace's own AI key; omitted for platform-paid turns. */
   apiKey?: string,
   /** Where proposed changes are kept; a chat route passes its own. */
   approvals?: ApprovalBinding,
@@ -200,7 +200,7 @@ export function runLekiu(
   messages: ModelMessage[],
   people: PeopleAccess,
   abortSignal?: AbortSignal,
-  /** A workspace's own OpenRouter key; omitted for platform-paid turns. */
+  /** A workspace's own AI key; omitted for platform-paid turns. */
   apiKey?: string,
   /** Where proposed changes are kept; a chat route passes its own. */
   approvals?: ApprovalBinding,
@@ -231,7 +231,7 @@ export function runBendahara(
   messages: ModelMessage[],
   finance: FinanceAccess,
   abortSignal?: AbortSignal,
-  /** A workspace's own OpenRouter key; omitted for platform-paid turns. */
+  /** A workspace's own AI key; omitted for platform-paid turns. */
   apiKey?: string,
   /** Where proposed changes are kept; a chat route passes its own. */
   approvals?: ApprovalBinding,

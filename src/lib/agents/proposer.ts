@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { approvalTitle } from '@/lib/chat/change-titles';
 import { type AgentDefinition, type Candidate } from '@/lib/agents/definition';
 import { TEXT_ESTIMATE_CENTS, costOr } from '@/lib/agents/costs';
-import { suggestProposals } from '@/lib/agents/openrouter-media';
+import { suggestProposals } from '@/lib/agents/ai-media';
 
 const MAX_PROPOSALS = 5;
 /** PostgREST returns at most this many rows per request. */

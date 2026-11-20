@@ -1,5 +1,5 @@
 /**
- * Reads and opens a workspace's stored OpenRouter key on the server.
+ * Reads and opens a workspace's stored AI key on the server.
  *
  * The sealed value never leaves the server: it is read with the service-role
  * client, by a workspace id the caller has already resolved from trusted

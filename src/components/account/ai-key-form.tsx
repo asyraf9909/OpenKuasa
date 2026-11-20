@@ -19,19 +19,19 @@ export function AiKeyForm({ hasKey }: { hasKey: boolean }) {
     <form action={formAction} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="api-key">
-          {hasKey ? 'Replace with a new key' : 'OpenRouter API key'}
+          {hasKey ? 'Replace with a new key' : 'AI API key'}
         </Label>
         <Input
           id="api-key"
           name="apiKey"
           type="password"
-          placeholder="sk-or-v1-…"
+          placeholder="sk-…"
           autoComplete="off"
           spellCheck={false}
           required
         />
         <p className="text-xs text-muted-foreground">
-          We check the key with OpenRouter, then store it encrypted. It is
+          We check the key with the AI server, then store it encrypted. It is
           never shown again; only its last four characters are.
         </p>
       </div>

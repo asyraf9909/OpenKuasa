@@ -24,7 +24,7 @@ export default async function AiKeyPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">AI key</h1>
         <p className="text-sm text-muted-foreground">
-          Chat runs on your own OpenRouter account.
+          Chat runs on your own AI key.
         </p>
       </div>
 
@@ -35,9 +35,9 @@ export default async function AiKeyPage() {
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-muted-foreground">
             <p>
-              Add one OpenRouter key for {viewer.orgName} and everyone in the
-              workspace chats on it, billed to your OpenRouter account. Set a
-              spending limit on the key in OpenRouter.
+              Add one key for {viewer.orgName} and everyone in the workspace
+              chats on it, billed to whichever provider serves the AI server.
+              Set a spending limit on the key where it was made.
             </p>
             <p>
               {`As a safety net, each person can send up to ${WORKSPACE_KEY_TURNS_PER_DAY} chat requests a day on the key.`}{' '}
@@ -49,16 +49,9 @@ export default async function AiKeyPage() {
                 : `Without a key, each person gets ${status?.freeLimit ?? 3} free questions a week across all the assistants.`}
             </p>
             <p>
-              Create a key at{' '}
-              <a
-                href="https://openrouter.ai/keys"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-primary hover:underline"
-              >
-                openrouter.ai/keys
-              </a>
-              .
+              Ask whoever runs this OpenKuasa server for a key. It is a key for
+              the AI server (LiteLLM) in front of the models, and starts with
+              sk-.
             </p>
           </CardContent>
         </Card>
@@ -82,7 +75,7 @@ export default async function AiKeyPage() {
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {status.hasKey
-                        ? 'Chat is running on your OpenRouter account.'
+                        ? 'Chat is running on your AI key.'
                         : status.freeLimit === 0
                           ? 'Add a key to start chatting.'
                           : `You have ${status.freeRemaining} of ${status.freeLimit} free questions left this week.`}

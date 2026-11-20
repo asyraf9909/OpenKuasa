@@ -415,7 +415,7 @@ export default async function PeopleAgentsScreen() {
         <p className="mb-4 rounded-md border border-dashed p-3 text-sm text-muted-foreground">
           The agent runs on your workspace&rsquo;s own AI key.{' '}
           <Link href="/account/ai" className="font-medium text-primary underline-offset-4 hover:underline">
-            Add an OpenRouter key
+            Add your AI key
           </Link>{' '}
           to use it.
         </p>

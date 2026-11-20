@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/agents/openrouter-media', () => ({ checkVideo: vi.fn() }));
+vi.mock('@/lib/agents/ai-media', () => ({ checkVideo: vi.fn() }));
 vi.mock('@/lib/ai/key-crypto', () => ({ hasKeySecret: () => true, decryptApiKey: () => 'k' }));
 
 const CRON_SECRET = 'cron-secret-0123456789abcdef0123456789abcdef';

@@ -25,7 +25,6 @@ import {
   suggestedCategoryLine,
 } from '@/lib/finance/receipt-reading';
 import {
-  RECEIPT_PDF_ENGINE,
   RECEIPT_READ_MAX_OUTPUT_TOKENS,
   RECEIPT_READ_TIMEOUT_MS,
   getReceiptForReading,
@@ -110,7 +109,7 @@ describe('which model reads', () => {
     expect(receiptModelId({ OPENKUASA_MODEL_RECEIPTS: '  ' })).toBeNull();
     // No model id is written in either file, and neither asks for the platform's model or key.
     for (const file of ['src/lib/finance/receipt-reader.ts', 'src/lib/finance/receipt-reading.ts']) {
-      expect(readFileSync(file, 'utf8'), file).not.toMatch(/anthropic\/|google\/|openai\/|gemini|claude|gpt-|getModel\(|OPENROUTER_API_KEY|consume_free_question/i);
+      expect(readFileSync(file, 'utf8'), file).not.toMatch(/anthropic\/|google\/|openai\/|gemini|claude|gpt-|getModel\(|LITELLM_API_KEY|consume_free_question/i);
     }
   });
 });
@@ -128,7 +127,7 @@ describe('what is sent', () => {
     expect(call.prompt.map((m) => m.role)).toEqual(['system', 'user']);
     expect(call.prompt[0].content).toBe(RECEIPT_READ_SYSTEM);
     // The instructions never change, so they are marked for the provider's cache; nothing after them is.
-    expect(call.prompt[0].providerOptions).toEqual({ openrouter: { cacheControl: { type: 'ephemeral' } } });
+    expect(call.prompt[0].providerOptions).toEqual({ openaiCompatible: { cacheControl: { type: 'ephemeral' } } });
     expect(call.prompt[1].providerOptions).toBeUndefined();
     const parts = call.prompt[1].content as SentPart[];
     expect(parts.map((p) => p.type)).toEqual(['text', 'file']);
@@ -146,22 +145,19 @@ describe('what is sent', () => {
     expect(parts[1]).toMatchObject({ mediaType: 'image/png', filename: 'receipt.png' });
   });
 
-  it('a PDF is read by the model’s own PDF input only: the request names the native engine, never a paid OCR one', async () => {
-    expect(RECEIPT_PDF_ENGINE).toBe('native');
+  it('a PDF goes as the model’s own PDF input: no OCR engine, no plugin, nothing billed per page', async () => {
     vi.spyOn(console, 'info').mockImplementation(() => {});
     const json = '{"vendor":"Shell","receipt_date":null,"amount":50,"sst_amount":null,"category_number":null}';
     const pdf = stub({ text: json });
     await read(pdf, PDF, 'application/pdf');
-    expect((pdf.doGenerateCalls[0] as { providerOptions?: unknown }).providerOptions).toEqual({
-      openrouter: { plugins: [{ id: 'file-parser', pdf: { engine: 'native' } }] },
-    });
-    // An image has no file parser to choose: no plugin at all.
-    for (const [bytes, type] of [[JPG, 'image/jpeg'], [PNG, 'image/png']] as const) {
-      const image = stub({ text: json });
-      await read(image, bytes, type);
-      expect(JSON.stringify((image.doGenerateCalls[0] as { providerOptions?: unknown }).providerOptions ?? {})).not.toContain('plugins');
+    // The file travels as a file part of the user's message; the request carries no
+    // provider-specific parser option that a per-page-billed engine could be named in.
+    expect((pdf.doGenerateCalls[0] as { providerOptions?: unknown }).providerOptions ?? {}).toEqual({});
+    for (const [bytes, type] of [[JPG, 'image/jpeg'], [PNG, 'image/png'], [PDF, 'application/pdf']] as const) {
+      const call = stub({ text: json });
+      await read(call, bytes, type);
+      expect(JSON.stringify((call.doGenerateCalls[0] as { providerOptions?: unknown }).providerOptions ?? {})).not.toMatch(/plugins|ocr|pdf-text/);
     }
-    expect(RECEIPT_PDF_ENGINE).not.toMatch(/ocr|pdf-text/);
   });
 
   it('the categories go as names in a numbered list in the user’s turn, never an id, and the answer is a place in that list', async () => {
@@ -233,12 +229,12 @@ describe('what comes back', () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(console, 'info').mockImplementation(() => {});
     expect(await read(stub({ text: 'I cannot read this.' }))).toEqual({ ok: false, reason: 'failed' });
-    expect(await read(stub({ error: Object.assign(new Error('bad key sk-or-secret'), { statusCode: 401 }) }))).toEqual({ ok: false, reason: 'key' });
+    expect(await read(stub({ error: Object.assign(new Error('bad key sk-secret'), { statusCode: 401 }) }))).toEqual({ ok: false, reason: 'key' });
     expect(await read(stub({ error: Object.assign(new Error('no credit'), { statusCode: 402 }) }))).toEqual({ ok: false, reason: 'credit' });
     expect(await read(stub({ error: Object.assign(new Error('boom'), { statusCode: 500, requestBodyValues: { file: 'BYTES' } }) }))).toEqual({ ok: false, reason: 'unavailable' });
     // A status code only: never the message, never the request (which carries the file).
     const logged = JSON.stringify(error.mock.calls);
-    expect(logged).not.toMatch(/sk-or-secret|BYTES|boom/);
+    expect(logged).not.toMatch(/sk-secret|BYTES|boom/);
   });
 
   it('a provider that is busy, down, or never reached is its own reason, not a receipt that could not be read', async () => {
@@ -488,7 +484,7 @@ describe('before anything is sent', () => {
     const pdf = readingQuestion(row({ mime_type: 'application/pdf' }))[0];
     expect(pdf).toContain('The whole file, as it is, with everything inside it');
     expect(pdf).not.toMatch(/photo|phone/);
-    expect(pdf).toContain('OpenRouter');
+    expect(pdf).toContain('AI server');
     expect(photo).not.toContain('as it is, with everything inside it');
   });
 
@@ -496,7 +492,7 @@ describe('before anything is sent', () => {
     const lines = readingQuestion(row());
     expect(lines).toHaveLength(3);
     expect(lines[0]).toContain('this file (JPG, 200 KB)');
-    expect(lines[0]).toContain('OpenRouter');
+    expect(lines[0]).toContain('AI server');
     expect(lines[1]).toContain('your workspace’s own AI key and uses that key’s credit');
     expect(lines[1]).toContain('Your workspace’s expense category names, up to sixty of them, are sent with it');
     expect(lines[1]).toContain('Nothing else from your workspace is sent');

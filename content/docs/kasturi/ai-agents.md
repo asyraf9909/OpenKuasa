@@ -15,7 +15,7 @@ Kasturi's agent watches your deals, contacts and follow-ups for what you ask, an
 
 ## Before you start
 
-The agent runs on your workspace's own AI key. If there is none, the screen asks you to add one. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+The agent runs on your workspace's own AI key. If there is none, the screen asks you to add one. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 

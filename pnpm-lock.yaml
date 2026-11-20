@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@ai-sdk/openai-compatible':
+        specifier: ^3.0.66
+        version: 3.0.66(zod@4.6.5)
       '@ai-sdk/react':
         specifier: ^4.0.136
         version: 4.0.136(react@19.2.8)(zod@4.6.5)
@@ -17,9 +20,6 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: 1.32.1
         version: 1.32.1(zod@4.6.5)
-      '@openrouter/ai-sdk-provider':
-        specifier: ^3.1.0
-        version: 3.1.0(ai@7.0.133(zod@4.6.5))(zod@4.6.5)
       '@supabase/ssr':
         specifier: ^0.12.7
         version: 0.12.7(@supabase/supabase-js@2.117.2)
@@ -137,6 +137,12 @@ packages:
 
   '@ai-sdk/mcp@2.0.71':
     resolution: {integrity: sha512-xJ0owCCL0yKhWakQNm1QP9NH+v/G/J7IZF5Td5bbc4cpfvicOwg/1VbmHGQS04lm7/OeH2qNlm5G7NiwoeJqmw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  '@ai-sdk/openai-compatible@3.0.66':
+    resolution: {integrity: sha512-w7hO8Zff6LyRBav3xs2YAnjSNh/fW7ymBsDuGRSjsD40/wiLWbbn9Hub11obLcjrxs2x1lXSFqKt8ZI5vX8u8Q==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -669,13 +675,6 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
-
-  '@openrouter/ai-sdk-provider@3.1.0':
-    resolution: {integrity: sha512-BQy1TA9fKrh47s9ivsO6FY5QimN7GUF0i8Qon3pkxQclEgShso0dClpcWn8OIyPLEZZPFaFKgI8TW4S/O0p0Dw==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      ai: ^7.0.0
-      zod: ^3.25.76 || ^4.1.8
 
   '@oxc-project/types@0.153.0':
     resolution: {integrity: sha512-jSNrRIyvPVLL5E1z/tS5zLAprosGz/FuI1PWwEOz59j3E4TTTzSpqKb/RDGqJhhW0QHYISGXxq582wGx6T11Tw==}
@@ -4768,6 +4767,12 @@ snapshots:
       pkce-challenge: 5.0.1
       zod: 4.6.5
 
+  '@ai-sdk/openai-compatible@3.0.66(zod@4.6.5)':
+    dependencies:
+      '@ai-sdk/provider': 4.0.25
+      '@ai-sdk/provider-utils': 5.0.57(zod@4.6.5)
+      zod: 4.6.5
+
   '@ai-sdk/provider-utils@5.0.57(zod@4.6.5)':
     dependencies:
       '@ai-sdk/provider': 4.0.25
@@ -5339,11 +5344,6 @@ snapshots:
       fastq: 1.20.3
 
   '@nolyfill/is-core-module@1.0.39': {}
-
-  '@openrouter/ai-sdk-provider@3.1.0(ai@7.0.133(zod@4.6.5))(zod@4.6.5)':
-    dependencies:
-      ai: 7.0.133(zod@4.6.5)
-      zod: 4.6.5
 
   '@oxc-project/types@0.153.0': {}
 

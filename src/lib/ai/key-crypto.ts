@@ -1,5 +1,5 @@
 /**
- * Encryption for workspace OpenRouter keys (bring-your-own-key).
+ * Encryption for workspace AI keys (bring-your-own-key).
  *
  * Keys are sealed with AES-256-GCM under a server-only secret
  * (`AI_KEYS_ENCRYPTION_SECRET`) before they are stored, so what sits in the
@@ -132,12 +132,15 @@ export function decryptApiKey(
   }
 }
 
-/** OpenRouter keys look like `sk-or-v1-…`; a cheap check before any network call. */
-export function isOpenRouterKeyShape(input: string): boolean {
-  return /^sk-or-[A-Za-z0-9_-]{16,300}$/.test(input.trim());
+/**
+ * A LiteLLM key looks like `sk-…`: its master key must, and the virtual keys it
+ * issues do too. A cheap check before any network call; the proxy decides.
+ */
+export function isProviderKeyShape(input: string): boolean {
+  return /^sk-[A-Za-z0-9_-]{16,300}$/.test(input.trim());
 }
 
 /** What we show back to people: never more than the last four characters. */
 export function keyHint(apiKey: string): string {
-  return `sk-or-…${apiKey.trim().slice(-4)}`;
+  return `sk-…${apiKey.trim().slice(-4)}`;
 }

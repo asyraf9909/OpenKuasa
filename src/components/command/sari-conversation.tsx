@@ -1115,7 +1115,7 @@ function ChatPane({
                             if (isText(part)) {
                               return part.text.trim() ? (
                                 <p key={i} className="whitespace-pre-wrap text-sm leading-relaxed">
-                                  {/* A guide path such as /docs/getting-started/openrouter-key becomes a link once the answer has arrived. */}
+                                  {/* A guide path such as /docs/getting-started/ai-key becomes a link once the answer has arrived. */}
                                   {withDocsLinks(part.text.trim(), !(busy && m === messages[messages.length - 1]), i)}
                                 </p>
                               ) : null;
@@ -1331,7 +1331,7 @@ function Composer({
             }}
             rows={1}
             placeholder={
-              disabled ? 'Add an OpenRouter key to keep chatting' : 'Ask anything…'
+              disabled ? 'Add your AI key to keep chatting' : 'Ask anything…'
             }
             disabled={disabled}
             aria-label="Ask anything"

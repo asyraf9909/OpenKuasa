@@ -20,7 +20,7 @@ const { withTuah } = await import('./helpers/approvals');
 
 const reach = () => ({ data: createSeedReachData() });
 const crm = () => ({ client: {} as never, orgId: 'org1', userId: 'u1', canWrite: true });
-const ask = [{ role: 'user' as const, content: 'How do I add my OpenRouter key?' }];
+const ask = [{ role: 'user' as const, content: 'How do I add my AI key?' }];
 
 describe('the docs search beside the change tools', () => {
   it('is held by a single assistant, and is in no approval map', () => {

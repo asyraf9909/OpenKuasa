@@ -15,7 +15,7 @@ The finance AI agent watches your books for what you ask, and suggests notes on 
 
 ## Before you start
 
-The agent runs on your workspace's own AI key. Without one, the screen asks you to add an OpenRouter key. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+The agent runs on your workspace's own AI key. Without one, the screen asks you to add an AI key. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 

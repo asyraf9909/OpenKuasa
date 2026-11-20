@@ -17,7 +17,7 @@ import {
   updateFormInput,
 } from '@/lib/reach/capabilities';
 import { approvalDetail, approvalTitle, type ItemKind } from '@/lib/chat/change-titles';
-import { generateImage, startVideo } from '@/lib/agents/openrouter-media';
+import { generateImage, startVideo } from '@/lib/agents/ai-media';
 import { IMAGE_ESTIMATE_CENTS, VIDEO_ESTIMATE_CENTS, costOr } from '@/lib/agents/costs';
 import { WEEKLY_STUDIO } from '@/lib/agents/types';
 import { createSupabaseReachData } from '@/lib/reach/supabase';

@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { ChatKeyNotice } from '@/components/chat/chat-key-notice';
 import type { ChatStatusForViewer } from '@/app/account/ai/actions';
 
-const GUIDE = 'href="/docs/getting-started/openrouter-key"';
+const GUIDE = 'href="/docs/getting-started/ai-key"';
 
 const render = (over: Partial<ChatStatusForViewer>) =>
   renderToStaticMarkup(
@@ -22,12 +22,11 @@ const render = (over: Partial<ChatStatusForViewer>) =>
   );
 
 describe('ChatKeyNotice', () => {
-  it('locked owner sees the four steps, the key page link and the guide link', () => {
+  it('locked owner sees the steps, the key page link and the guide link', () => {
     const html = render({});
-    expect(html).toContain('Keep chatting with your own OpenRouter key');
-    expect(html).toContain('Create a free account at openrouter.ai.');
-    expect(html).toContain('Add a few dollars of credit.');
-    expect(html).toContain('Create a key.');
+    expect(html).toContain('Keep chatting with your own AI key');
+    expect(html).toContain('Ask whoever runs this OpenKuasa server for an AI key.');
+    expect(html).toContain('It starts with sk-.');
     expect(html).toContain('Paste it on the AI key page.');
     expect(html).toContain('href="/account/ai"');
     expect(html).toContain('Add your key');
@@ -50,13 +49,13 @@ describe('ChatKeyNotice', () => {
 
   it('on a server with no free questions it says start, not "you have used your 3"', () => {
     const owner = render({ freeLimit: 0, freeRemaining: 0 });
-    expect(owner).toContain('Start chatting with your own OpenRouter key');
+    expect(owner).toContain('Start chatting with your own AI key');
     expect(owner).not.toContain('free questions');
     expect(owner).not.toContain('Keep chatting');
     expect(owner).toContain('href="/account/ai"');
 
     const member = render({ freeLimit: 0, freeRemaining: 0, canManageKey: false });
-    expect(member).toContain('add an OpenRouter key to start chatting');
+    expect(member).toContain('add an AI key to start chatting');
     expect(member).not.toContain('free questions');
   });
 

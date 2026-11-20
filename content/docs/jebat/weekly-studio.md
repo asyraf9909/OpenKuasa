@@ -15,7 +15,7 @@ Weekly Studio is Jebat's AI agent. Each run reads your recent leads, campaigns a
 
 ## Before you start
 
-Weekly Studio runs on your workspace's own AI key. Without one, a run fails. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+Weekly Studio runs on your workspace's own AI key. Without one, a run fails. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 
@@ -41,5 +41,5 @@ Weekly Studio runs on your workspace's own AI key. Without one, a run fails. See
 
 - [Approve or reject Weekly Studio's suggestions](/docs/jebat/agent-suggestions)
 - [Set Weekly Studio's schedules and spend caps](/docs/jebat/agent-schedules)
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)
 - [AI agents and their focus in the other products](/docs/tuah/ai-agents): Jebat's **AI Agents** screen runs Weekly Studio only, with no focus to set

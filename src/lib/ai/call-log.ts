@@ -15,16 +15,7 @@ type CallEnd = {
     inputTokenDetails?: { cacheReadTokens?: number | undefined; cacheWriteTokens?: number | undefined };
   };
   performance: { responseTimeMs: number };
-  /** OpenRouter says which provider served the call (`openrouter.provider`): each provider keeps its own prompt cache. */
-  providerMetadata?: unknown;
 };
-
-/** The provider OpenRouter routed the call to, as a short label of plain characters, or '' when it did not say. */
-function servedBy(metadata: unknown): string {
-  const name = (metadata as { openrouter?: { provider?: unknown } } | null | undefined)?.openrouter?.provider;
-  if (typeof name !== 'string') return '';
-  return name.replace(/\s+/g, '_').replace(/[^A-Za-z0-9_.-]/g, '').slice(0, 40);
-}
 
 export function logModelCall(agent: string, model: string) {
   return (call: CallEnd) => {
@@ -33,9 +24,9 @@ export function logModelCall(agent: string, model: string) {
         ? call.finishReason
         : ((call.finishReason as { unified?: string } | null)?.unified ?? 'unknown');
     const cache = call.usage.inputTokenDetails;
-    const provider = servedBy(call.providerMetadata);
+    // `model` is what served the call: LiteLLM answers with the model it routed to.
     console.info(
-      `[ai] agent=${agent} model=${call.modelId || model}${provider ? ` provider=${provider}` : ''} ms=${Math.round(call.performance.responseTimeMs)} ` +
+      `[ai] agent=${agent} model=${call.modelId || model} ms=${Math.round(call.performance.responseTimeMs)} ` +
         // `cached` is input read from the prompt cache (billed at a fraction), `wrote` is input written to it.
         `in=${call.usage.inputTokens ?? '?'} cached=${cache?.cacheReadTokens ?? 0} wrote=${cache?.cacheWriteTokens ?? 0} ` +
         `out=${call.usage.outputTokens ?? '?'} finish=${finish}`,
@@ -53,10 +44,11 @@ export function modelErrorCode(error: unknown): { code: unknown } {
   const { statusCode, code, name, data } = (
     error && typeof error === 'object' ? error : {}
   ) as { statusCode?: unknown; code?: unknown; name?: unknown; data?: unknown };
-  // OpenRouter can answer HTTP 200 with an error in the body: the SDK throws that with statusCode 200 and the body as
+  // A proxy can answer HTTP 200 with an error in the body: the SDK throws that with statusCode 200 and the body as
   // `data`. A 200 says nothing of what went wrong, so the body's own class (its code) is used instead. Only a number or
   // a short label of plain characters is taken from it: its message could echo the prompt or the file.
-  const bodyCode = typeof data === 'object' && data !== null ? (data as { code?: unknown }).code : undefined;
+  const body = typeof data === 'object' && data !== null ? (data as { code?: unknown; error?: { code?: unknown } }) : undefined;
+  const bodyCode = body?.error?.code ?? body?.code;
   const fromBody =
     typeof bodyCode === 'number' || (typeof bodyCode === 'string' && /^[A-Za-z0-9_.:-]{1,64}$/.test(bodyCode)) ? bodyCode : undefined;
   const succeeded = typeof statusCode === 'number' && statusCode >= 200 && statusCode < 300;

@@ -78,8 +78,8 @@ export type KnowledgeFields = { title: string; body: string };
 export type ChatbotPause = 'key_refused' | 'no_credit';
 
 export const PAUSE_MESSAGES: Record<ChatbotPause, string> = {
-  key_refused: 'The chat on your landing pages is paused: your OpenRouter key could not be used. Check it or save it again, then switch the chat back on.',
-  no_credit: 'The chat on your landing pages is paused: your OpenRouter key has no credit left. Top it up, then switch the chat back on.',
+  key_refused: 'The chat on your landing pages is paused: your AI key could not be used. Check it or save it again, then switch the chat back on.',
+  no_credit: 'The chat on your landing pages is paused: your AI key has no credit left. Top it up, then switch the chat back on.',
 };
 
 /** How many conversations the screen lists. */
