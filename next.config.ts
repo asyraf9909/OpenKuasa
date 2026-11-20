@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
     "/*": ["content/docs/**/*.md"],
   },
   experimental: {
+    // Keep `next dev` and `next build` checking the pinned release against security
+    // advisories, so a later one is reported instead of discovered later.
+    agentUpgrade: "security",
     // The apply form's post: a 5 MB CV plus the form's other fields. The default is 1 MB.
     serverActions: { bodySizeLimit: "6mb" },
     // Client-side Router Cache. A page you just visited is re-served from the browser on
