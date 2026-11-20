@@ -63,7 +63,7 @@ Never put a secret in a file you commit or share. `SUPABASE_SERVICE_ROLE_KEY` an
 Make the key pair once:
 
 ```bash
-npx web-push generate-vapid-keys
+pnpm dlx web-push generate-vapid-keys
 ```
 
 Keep the same pair on every host. A new pair cuts off every device that turned push on. Without all three values, the Notifications page says push isn't set up and the rest of the app works as before. Push is sent by a scheduled job: see [Scheduled jobs](/docs/developers/scheduled-jobs).

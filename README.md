@@ -263,6 +263,11 @@ pnpm install
 pnpm dev
 ```
 
+Use pnpm, not npm: `npm install` stops with `EBADDEVENGINES`, because the
+repository installs with pnpm (`node_modules` is a pnpm symlink farm and the
+lockfile is `pnpm-lock.yaml`). Where you would reach for `npx`, use
+`pnpm exec <tool>` or `pnpm dlx <tool>`.
+
 Open [http://localhost:3000](http://localhost:3000). With no Supabase project
 set, it opens in preview mode on sample data (see below). To use your own
 project, set the variables below, then run `pnpm db:migrate --apply` once to

@@ -178,6 +178,17 @@ issue gets one type label and, where it applies, an area label.
 
 Always use pnpm, not npm or yarn.
 
+`npm install` is refused rather than run: `node_modules` is a pnpm symlink farm,
+and npm crashes on it with `Cannot read properties of null (reading 'matches')`,
+which says nothing about the cause. The manifest says the same thing through
+`devEngines`, so npm stops with `EBADDEVENGINES` and names pnpm as the manager
+this repository needs. That applies to `npx` as well, since it is npm. Use:
+
+| Instead of | Use |
+| --- | --- |
+| `npx <tool>` | `pnpm exec <tool>` |
+| `npx create-…`, `npx <tool>` (not installed) | `pnpm dlx <tool>` |
+
 ### Adding a screen
 
 Each screen has its own route, so a page loads only the scripts its own screen
