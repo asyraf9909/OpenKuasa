@@ -186,7 +186,7 @@ describe('Tuah with hiring', () => {
       await runTuah(...withTuah(ask, reach(), undefined, undefined, null, null, withTeam, hire())).consumeStream();
       const tuah = seen.calls.find((c) => c.layer === 'orchestrator');
       expect(tuah, String(Boolean(withTeam))).toBeDefined();
-      expect(systemOf(tuah!)?.providerOptions, String(Boolean(withTeam))).toEqual({ openrouter: { cacheControl: { type: 'ephemeral' } } });
+      expect(systemOf(tuah!)?.providerOptions, String(Boolean(withTeam))).toEqual({ openaiCompatible: { cacheControl: { type: 'ephemeral' } } });
       // The words are untouched: one system message, the prompt as it always was.
       expect(typeof systemOf(tuah!)?.content).toBe('string');
       expect(String(systemOf(tuah!)?.content)).toContain('You are Tuah');
@@ -202,7 +202,7 @@ describe('Tuah with hiring', () => {
     const specialists = seen.calls.filter((c) => c.layer === 'worker');
     expect(specialists.length).toBeGreaterThan(0);
     for (const specialist of specialists) {
-      expect(systemOf(specialist)?.providerOptions).toEqual({ openrouter: { cacheControl: { type: 'ephemeral' } } });
+      expect(systemOf(specialist)?.providerOptions).toEqual({ openaiCompatible: { cacheControl: { type: 'ephemeral' } } });
     }
   });
 });

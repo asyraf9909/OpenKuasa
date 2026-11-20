@@ -13,7 +13,7 @@ Everyone in the workspace can open the Overview and ask Bendahara. What Bendahar
 
 ## Before you start
 
-The assistant uses your workspace's AI key, or the free questions each person gets without one. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+The assistant uses your workspace's AI key, or the free questions each person gets without one. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 

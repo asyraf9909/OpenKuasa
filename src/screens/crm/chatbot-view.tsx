@@ -768,7 +768,7 @@ export function ChatbotView({
               <>
                 The chat answers customers on your workspace&rsquo;s own AI key.{' '}
                 <Link href="/account/ai" className="font-medium text-primary underline-offset-4 hover:underline">
-                  Add an OpenRouter key
+                  Add your AI key
                 </Link>{' '}
                 to use it.
               </>

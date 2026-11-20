@@ -13,7 +13,7 @@ Owners and admins. Everyone else sees "This page is for owners and admins of the
 
 ## Before you start
 
-The agent runs on your workspace's own AI key. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+The agent runs on your workspace's own AI key. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 

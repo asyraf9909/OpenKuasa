@@ -122,7 +122,7 @@ export function SupportChat({ canChat, email, limit }: { canChat: boolean; email
         </form>
       )}
       <p className="text-xs text-mk-muted">
-        Up to {limit} questions a week. A workspace with its own OpenRouter key uses that key instead. Sari can&apos;t see
+        Up to {limit} questions a week. A workspace with its own AI key uses that key instead. Sari can&apos;t see
         your workspace.
       </p>
     </div>

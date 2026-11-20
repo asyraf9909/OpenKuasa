@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 type Refusal = { status: number; code: string; error: string };
 const ctl = vi.hoisted(() => ({
-  access: { kind: 'byok', apiKey: 'sk-or-workspace' } as
+  access: { kind: 'byok', apiKey: 'sk-workspace' } as
     | { kind: 'byok'; apiKey: string }
     | { kind: 'free'; remaining: number },
   freeUsed: 0,
@@ -52,7 +52,7 @@ const post = (messages: unknown[]) =>
   new Request('http://x/api/chat', { method: 'POST', body: JSON.stringify({ messages }) });
 
 beforeEach(() => {
-  ctl.access = { kind: 'byok', apiKey: 'sk-or-workspace' };
+  ctl.access = { kind: 'byok', apiKey: 'sk-workspace' };
   ctl.freeUsed = 0;
 });
 
@@ -199,7 +199,7 @@ describe('a free question carries less', () => {
     expect(ctl.freeUsed).toBe(0);
 
     // The same request is fine on a workspace's own key.
-    ctl.access = { kind: 'byok', apiKey: 'sk-or-workspace' };
+    ctl.access = { kind: 'byok', apiKey: 'sk-workspace' };
     expect((await prepareChat(post([user('m1', text('look'), ...two)]))).ok).toBe(true);
   });
 
@@ -219,7 +219,7 @@ describe('a free question carries less', () => {
     ctl.access = { kind: 'free', remaining: 1 };
     const free = await prepareChat(post(messages));
     expect(free.ok && free.uiMessages.length).toBe(FREE_MAX_MESSAGES);
-    ctl.access = { kind: 'byok', apiKey: 'sk-or-workspace' };
+    ctl.access = { kind: 'byok', apiKey: 'sk-workspace' };
     const paid = await prepareChat(post(messages));
     expect(paid.ok && paid.uiMessages.length).toBe(11);
   });

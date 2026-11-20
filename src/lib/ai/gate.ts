@@ -1,7 +1,7 @@
 /**
  * Who pays for a chat turn.
  *
- * A workspace that has added its own OpenRouter key chats on that key with no
+ * A workspace that has added its own AI key chats on that key with no
  * platform quota. Without one, each signed-up user gets a few free questions a
  * week on the platform key, after which chat asks for a key. Demo guests never
  * reach a model.
@@ -114,7 +114,7 @@ export async function resolveChatAccess(
   const needsKey = locked(
     402,
     'key_required',
-    'Add your OpenRouter key to keep chatting.',
+    'Add your AI key to keep chatting.',
   );
   if (!hasProviderKey()) return needsKey;
 

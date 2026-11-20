@@ -8,8 +8,8 @@ const RECEIPT = '44444444-4444-4444-8444-444444444444';
 const PATH = `${ORG}/22222222-2222-4222-8222-222222222222.jpg`;
 const JPG = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0x10, 0x4a, 0x46, 0x49, 0x46, 0, 1, 1, 0, 0, 1]);
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0x0d, 0x49, 0x48, 0x44, 0x52]);
-const WORKSPACE_KEY = 'sk-or-v1-workspace-key-0001';
-const PLATFORM_KEY = 'sk-or-v1-platform-key-0002';
+const WORKSPACE_KEY = 'sk-workspace-key-0001';
+const PLATFORM_KEY = 'sk-platform-key-0002';
 const TYPED = { vendor: 'Typed Sdn Bhd', receipt_date: '2026-10-01', amount: 12.5, sst_amount: null };
 const CATEGORIES = [
   { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', name: 'Office' },
@@ -154,7 +154,7 @@ beforeEach(() => {
   ctl.reading = { ok: true, vendor: 'Shell Bangsar', receipt_date: '2026-10-03', amount: 142.5, sst_amount: 8.07, category_index: 1 };
   ctl.wrote = { ok: true, data: { written: true } };
   // The platform's key is on this server: the action must never use it.
-  process.env.OPENROUTER_API_KEY = PLATFORM_KEY;
+  process.env.LITELLM_API_KEY = PLATFORM_KEY;
 });
 
 afterEach(() => {
@@ -491,7 +491,7 @@ describe('how the code is kept safe', () => {
 
   it('nothing here reaches for the platform’s key, the free questions or a model id written in code', () => {
     for (const file of [ACTIONS, READER, 'src/lib/finance/receipt-reading.ts']) {
-      expect(read(file), file).not.toMatch(/OPENROUTER_API_KEY|consume_free_question|resolveChatAccess|getModel\(|pickModelId|hasProviderKey/);
+      expect(read(file), file).not.toMatch(/LITELLM_API_KEY|consume_free_question|resolveChatAccess|getModel\(|pickModelId|hasProviderKey/);
     }
   });
 

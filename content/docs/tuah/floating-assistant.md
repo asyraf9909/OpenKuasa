@@ -36,7 +36,7 @@ In your own workspace, the panel remembers its chat while you move between scree
 
 ## Common problems
 
-- **The panel says the free questions are used up.** It shares the weekly free questions with every other assistant. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+- **The panel says the free questions are used up.** It shares the weekly free questions with every other assistant. See [Add your AI key](/docs/getting-started/ai-key).
 - **The button covers the last row of a page.** Scroll down. Each screen leaves room at the bottom so the last content can scroll clear of the button.
 
 ## Related

@@ -89,7 +89,7 @@ import {
 } from '@/lib/chat/delegation';
 
 export type TeamContext = {
-  /** A workspace's own OpenRouter key; omitted for platform-paid turns. */
+  /** A workspace's own AI key; omitted for platform-paid turns. */
   apiKey?: string;
   /** The conversation so far, in words, for specialists that only see their task. */
   transcript: string;

@@ -38,10 +38,10 @@ Everyone in the workspace can open the Overview. The figures come from the works
 - **No deal has closed yet**: the win rate needs at least one deal marked won or lost.
 - A deal moving from one stage to another is not shown in **Recent activity**. Only adding, winning and losing a deal are.
 - In the demo workspace, the chat gives a sample answer. Sign up to ask about your own data.
-- Each person has 3 free questions a week across all the assistants, unless your workspace adds its own OpenRouter key.
+- Each person has 3 free questions a week across all the assistants, unless your workspace adds its own AI key.
 
 ## Related
 
 - [Add and work with deals](/docs/kasturi/deals)
 - [Add and manage contacts](/docs/kasturi/contacts)
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)

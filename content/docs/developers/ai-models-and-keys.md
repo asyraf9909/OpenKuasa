@@ -4,7 +4,7 @@ description: How a self-hosted OpenKuasa pays for AI, which models it uses, and 
 order: 7
 ask: How do AI keys and models work on a self-hosted OpenKuasa?
 ---
-The assistants and agents call models through OpenRouter. Each workspace can bring its own OpenRouter key. A server can also offer a few free questions on a platform key.
+The assistants and agents call models through a LiteLLM proxy, which speaks the OpenAI-compatible API and routes each model name to whichever provider serves it. Each workspace can bring its own key. A server can also offer a few free questions on a platform key.
 
 ## Who can do this
 
@@ -14,8 +14,8 @@ The assistants and agents call models through OpenRouter. Each workspace can bri
 ## How a chat question is paid for
 
 1. **The workspace has its own key.** The question runs on that key. As a guard against a runaway script or a stolen session, each person may run up to 200 chat turns a day on it, counted per person and reset at midnight UTC. Approving a change the assistant proposed counts as a turn. If the server cannot open the stored key, chat stops. It never falls back to the platform key.
-2. **No workspace key, and the server has `OPENROUTER_API_KEY`.** Each signed-up person gets 3 free questions a week on the platform key.
-3. **Neither.** Chat asks for a key: **"Add your OpenRouter key to keep chatting."**
+2. **No workspace key, and the server has `LITELLM_API_KEY`.** Each signed-up person gets 3 free questions a week on the platform key.
+3. **Neither.** Chat asks for a key: **"Add your AI key to keep chatting."**
 
 Demo visitors never reach a model.
 
@@ -27,15 +27,15 @@ Demo visitors never reach a model.
 2. Set `SUPABASE_SERVICE_ROLE_KEY`. The stored key is read on the server with it.
 3. Use the same `AI_KEYS_ENCRYPTION_SECRET` on every host, and keep it. Each stored key is sealed with it (AES-256-GCM) and bound to its workspace, so a value copied to another workspace does not open.
 
-How an owner adds the key is in [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+How an owner adds the key is in [Add your AI key](/docs/getting-started/ai-key).
 
 ### Offer free questions (optional)
 
-Set `OPENROUTER_API_KEY` to a key of your own. It pays for the free questions. Without it there are no free questions.
+Set `LITELLM_API_KEY` to the proxy's master key, or to a virtual key made for the platform's own spend. It pays for the free questions. Without it there are no free questions.
 
 ### Choose the models
 
-Set these to OpenRouter model ids:
+Set these to the model names your LiteLLM `model_list` holds:
 
 - `OPENKUASA_MODEL_ORCHESTRATOR` and `OPENKUASA_MODEL_WORKER`: the models for Tuah and its specialists. The orchestrator can be a strong model while the specialists run a cheaper, faster one.
 - `OPENKUASA_MODEL_RECEIPTS`: the model that reads receipts. Without it, the worker model is used. With neither, a receipt is not read and the Receipts Inbox says **"Reading receipts is not set up on this server."**
@@ -43,16 +43,16 @@ Set these to OpenRouter model ids:
 
 An unset Tuah or Weekly Studio model variable falls back to a default written in the code. Set them yourself so you know what you are paying for.
 
-`AI_GATEWAY_BASE_URL` puts an optional gateway in front of OpenRouter.
+`LITELLM_BASE_URL` says where the proxy is. A host alone gets `/v1` added; a full path is used as given, which is what a gateway in front of LiteLLM needs.
 
 ## Common problems
 
 - **"Your workspace key could not be used on this server. Ask an owner to save it again."** The stored key was sealed with a different `AI_KEYS_ENCRYPTION_SECRET`, or the server has none. Set the original secret, or have an owner or admin save the key again.
 - **"Chat is unavailable right now. Please try again."** The server could not read the stored key (for example, `SUPABASE_SERVICE_ROLE_KEY` is missing), the free-question count or the daily count.
 - **"You have reached today’s chat limit. It resets at midnight UTC."** The person has used their 200 turns for the day on the workspace key.
-- **"Add your OpenRouter key to keep chatting."** The free questions are used up for the week, or the server has no `OPENROUTER_API_KEY`.
+- **"Add your AI key to keep chatting."** The free questions are used up for the week, or the server has no `LITELLM_API_KEY`.
 
 ## Related
 
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)
 - [Environment variables](/docs/developers/environment-variables)

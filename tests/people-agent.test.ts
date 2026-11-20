@@ -2,15 +2,15 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Fake model: no network, and the pick prompt is captured. The rest of the module stays real.
-vi.mock('@/lib/agents/openrouter-media', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@/lib/agents/openrouter-media')>()),
+vi.mock('@/lib/agents/ai-media', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/agents/ai-media')>()),
   suggestProposals: vi.fn(),
 }));
 
 import { AGENT_KEYS } from '@/lib/agents/agent-keys';
 import { financeAgent } from '@/lib/agents/finance-agent';
 import { interpretFocus } from '@/lib/agents/focus/interpret';
-import { suggestProposals } from '@/lib/agents/openrouter-media';
+import { suggestProposals } from '@/lib/agents/ai-media';
 import { peopleAgent } from '@/lib/agents/people-agent';
 import { proposeChanges } from '@/lib/agents/proposer';
 import { AGENTS, agentForProduct } from '@/lib/agents/registry';

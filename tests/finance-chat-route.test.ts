@@ -21,7 +21,7 @@ vi.mock('@/lib/supabase/server', () => ({
       auth: { getUser: async () => ({ data: { user: ctl.user }, error: null }) },
       rpc: async (name: string) => {
         if (name === 'org_ai_key_status') {
-          return { data: ctl.sealedKey ? [{ key_hint: 'sk-or-…aaaa' }] : [], error: null };
+          return { data: ctl.sealedKey ? [{ key_hint: 'sk-…aaaa' }] : [], error: null };
         }
         if (name === 'consume_free_question') {
           ctl.freeConsumed += 1;

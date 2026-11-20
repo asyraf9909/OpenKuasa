@@ -22,7 +22,7 @@ In the demo, the **AI Agents** screens show sample content only.
 
 Each product has its own **AI Agents** screen in its side menu. They all work the same way, as below. Jebat's **AI Agents** screen is different: it runs the Weekly Studio agent, which drafts a weekly content digest.
 
-The agent runs on your workspace's own OpenRouter key. Free questions do not cover it. Without a key, the screen says **The agent runs on your workspace's own AI key.** See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+The agent runs on your workspace's own AI key. Free questions do not cover it. Without a key, the screen says **The agent runs on your workspace's own AI key.** See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 
@@ -71,7 +71,7 @@ In Lekir, Lekiu and Bendahara, approved notes are listed under **Notes from the 
 
 ## Common problems
 
-- **"Add your AI key in Settings to use the agent."** The workspace has no OpenRouter key. An owner or admin adds one first.
+- **"Add your AI key in Settings to use the agent."** The workspace has no AI key. An owner or admin adds one first.
 - **"Write what the agent should watch for (up to 500 characters)."** The focus is empty or too long.
 - **"I couldn't match this to anything I can watch for".** None of your words matched a check this agent can run. **Looks right** stays greyed out. Click **Edit** and try other words, or start from an example.
 - **"You have changed the focus 10 times today. Try again tomorrow."** The focus can be saved 10 times a day.
@@ -86,4 +86,4 @@ In Lekir, Lekiu and Bendahara, approved notes are listed under **Notes from the 
 ## Related
 
 - [Approve or reject a change](/docs/tuah/approve-changes)
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)

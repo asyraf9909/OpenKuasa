@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { webSearch, writeDigest } from '@/lib/agents/openrouter-media';
+import { webSearch, writeDigest } from '@/lib/agents/ai-media';
 import { TEXT_ESTIMATE_CENTS, costOr } from '@/lib/agents/costs';
 import { proposeChanges } from '@/lib/agents/proposer';
 import { RunInProgressError, type AgentRunStatus, type AgentRunTrigger } from '@/lib/agents/types';

@@ -1,27 +1,53 @@
 /**
  * LLM provider factory for the Ask-Jebat agent.
  *
- * Provider-agnostic by design (AGPL self-hosters swap with env alone): OpenRouter
- * is the default — one key, any model — with the model chosen *per layer* so the
- * orchestrator can run a strong model while sub-agents run a cheap/fast one.
+ * Provider-agnostic by design (AGPL self-hosters swap with env alone): every
+ * call goes to a LiteLLM proxy, which speaks the OpenAI-compatible API and
+ * routes a model name to whichever provider serves it. The model is chosen
+ * *per layer* so the orchestrator can run a strong model while sub-agents run a
+ * cheap/fast one.
  *
  * The provider instance is created lazily, so importing this module never throws
- * when `OPENROUTER_API_KEY` is unset (keeps builds and unit tests key-free).
+ * when the endpoint or key is unset (keeps builds and unit tests key-free).
  */
 
 import 'server-only';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import type { LanguageModel } from 'ai';
 
 export type AgentLayer = 'orchestrator' | 'worker';
 
-/** Fallbacks used only when the per-layer env var is unset. Override via env; exact slugs at https://openrouter.ai/models */
+/** Fallbacks used only when the per-layer env var is unset. Override via env; each is a deployment name in LiteLLM. */
 const FALLBACK_MODEL: Record<AgentLayer, string> = {
   orchestrator: 'anthropic/claude-sonnet-4.5',
   worker: 'anthropic/claude-haiku-4.5',
 };
 
 type EnvLike = Record<string, string | undefined>;
+
+/** Where LiteLLM's proxy listens when nothing names another endpoint (its own default port). */
+const DEFAULT_BASE_URL = 'http://localhost:4000';
+
+/**
+ * The OpenAI-compatible base URL every call is posted to. LiteLLM's own routes
+ * live under `/v1`, so that is added when the configured value names the proxy
+ * rather than a path (`http://litellm:4000` → `…/v1`); a value that already
+ * ends in a version (`…/v1`) or names a deeper path is used as given, which is
+ * what a gateway in front of LiteLLM needs.
+ */
+export function providerBaseUrl(env: EnvLike = process.env): string {
+  const raw = (env.LITELLM_BASE_URL?.trim() || env.OPENAI_BASE_URL?.trim() || DEFAULT_BASE_URL).replace(/\/+$/, '');
+  return /\/v\d+$/.test(raw) ? raw : `${raw}/v1`;
+}
+
+/**
+ * The platform key: LiteLLM's master key or a virtual key for the platform's
+ * own spend. `OPENAI_API_KEY` is read as well, because that is the variable an
+ * OpenAI-compatible endpoint is usually handed. Null when neither is set.
+ */
+export function platformApiKey(env: EnvLike = process.env): string | null {
+  return env.LITELLM_API_KEY?.trim() || env.OPENAI_API_KEY?.trim() || null;
+}
 
 /** Pure model-id resolution (env → fallback), extracted for unit testing. */
 export function pickModelId(layer: AgentLayer, env: EnvLike = process.env): string {
@@ -34,39 +60,67 @@ export function pickModelId(layer: AgentLayer, env: EnvLike = process.env): stri
 
 /** True when a provider key is configured — lets the route return a clean 503 instead of crashing. */
 export function hasProviderKey(env: EnvLike = process.env): boolean {
-  return Boolean(env.OPENROUTER_API_KEY?.trim());
+  return platformApiKey(env) !== null;
+}
+
+/**
+ * Moves each message's cache mark onto its last text block, as `cache_control`.
+ *
+ * The AI SDK spreads a message's `providerOptions.openaiCompatible` into the
+ * message itself, so the mark leaves as `{ role, content, cacheControl }`. LiteLLM
+ * reads a breakpoint from a content block (`cache_control` on a `text` part) and
+ * ignores a field beside the role, so the mark is moved there: the content becomes
+ * a block array with the last text block marked. A model without prompt caching
+ * ignores the breakpoint; a request with no mark is left exactly as it was.
+ */
+function withCacheBreakpoints(body: Record<string, unknown>): Record<string, unknown> {
+  const messages = body.messages;
+  if (!Array.isArray(messages)) return body;
+  let marked = false;
+  const moved = messages.map((message: unknown) => {
+    if (!message || typeof message !== 'object') return message;
+    const { cacheControl, ...rest } = message as Record<string, unknown>;
+    if (!cacheControl || typeof cacheControl !== 'object') return message;
+    marked = true;
+    const content = rest.content;
+    const blocks: Record<string, unknown>[] =
+      typeof content === 'string'
+        ? [{ type: 'text', text: content }]
+        : Array.isArray(content)
+          ? content.map((block: unknown) => ({ ...(block as Record<string, unknown>) }))
+          : [];
+    // The breakpoint goes on the last text block, which is the end of what is cached.
+    const last = blocks.map((block) => block.type).lastIndexOf('text');
+    if (last === -1) return { ...rest, content, cache_control: cacheControl };
+    blocks[last] = { ...blocks[last], cache_control: cacheControl };
+    return { ...rest, content: blocks };
+  });
+  return marked ? { ...body, messages: moved } : body;
 }
 
 function createProvider(apiKey: string) {
-  return createOpenRouter({
+  return createOpenAICompatible({
+    name: 'litellm',
     apiKey,
-    // Optional second intermediary (Cloudflare AI Gateway); off unless configured.
-    baseURL: process.env.AI_GATEWAY_BASE_URL?.trim() || undefined,
-    appName: 'OpenKuasa',
-    appUrl: 'https://openkuasa.com',
+    baseURL: providerBaseUrl(),
+    transformRequestBody: withCacheBreakpoints,
   });
 }
 
 /**
- * The OpenRouter session a model's calls belong to. Through OpenRouter one model is served by several providers (for
- * Claude: Anthropic, Amazon, Google), and each keeps its own prompt cache. Without a session OpenRouter keeps calls on
- * one provider only after a cache hit, and guesses the conversation from its first messages, so a call can land on a
- * provider whose cache is cold and pay to write the whole prompt again. With a session it keeps every call on one
- * provider from the first (and still moves when that provider fails). The cached prompt is the same for every user of
- * an assistant, so the session is the model alone: nothing about the workspace or the person is in it.
+ * A model of `provider` under the id the caller named. LiteLLM takes the model
+ * name from the request itself, so the id is passed through as given: the same
+ * name the proxy's `model_list` holds.
  */
-export const routingSession = (modelId: string) => `openkuasa:${modelId}`.slice(0, 256);
+const named = (provider: ReturnType<typeof createOpenAICompatible>, modelId: string): LanguageModel =>
+  provider(modelId);
 
-/** A model of `provider`, in its routing session. */
-const inSession = (provider: ReturnType<typeof createOpenRouter>, modelId: string): LanguageModel =>
-  provider(modelId, { extraBody: { session_id: routingSession(modelId) } });
-
-let platformProvider: ReturnType<typeof createOpenRouter> | null = null;
+let platformProvider: ReturnType<typeof createOpenAICompatible> | null = null;
 
 function getPlatformProvider() {
-  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  const apiKey = platformApiKey();
   if (!apiKey) {
-    throw new Error('OPENROUTER_API_KEY is not set — chat cannot reach the model.');
+    throw new Error('No AI key is set (LITELLM_API_KEY) — chat cannot reach the model.');
   }
   platformProvider ??= createProvider(apiKey);
   return platformProvider;
@@ -79,7 +133,7 @@ function getPlatformProvider() {
 export function getModel(layer: AgentLayer, apiKey?: string): LanguageModel {
   // A workspace provider is built per request so keys are never cached.
   const provider = apiKey ? createProvider(apiKey) : getPlatformProvider();
-  return inSession(provider, pickModelId(layer));
+  return named(provider, pickModelId(layer));
 }
 
 /**
@@ -91,5 +145,5 @@ export function getModel(layer: AgentLayer, apiKey?: string): LanguageModel {
 export function getWorkspaceModelById(modelId: string, apiKey: string): LanguageModel {
   if (!apiKey.trim() || !modelId.trim()) throw new Error('A workspace model needs a key and a model id.');
   // Built per request so keys are never cached.
-  return inSession(createProvider(apiKey), modelId.trim());
+  return named(createProvider(apiKey), modelId.trim());
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-/** Account → AI key on a server with no free questions (no platform OpenRouter key). */
+/** Account → AI key on a server with no free questions (no platform AI key). */
 
 vi.mock('@/lib/auth/viewer', () => ({
   getViewer: async () => ({ orgName: 'Kedai Maju', role: 'owner', isDemo: false }),

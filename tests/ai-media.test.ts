@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { costOr, usdToCents } from '@/lib/agents/costs';
-import * as media from '@/lib/agents/openrouter-media';
+import * as media from '@/lib/agents/ai-media';
 
 // Shape-only: never calls the network. The real calls are validated at the manual smoke;
 // agent/runner unit tests mock this whole module.
-describe('openrouter media seam (shape only)', () => {
+describe('AI media seam (shape only)', () => {
   test('exports the five media functions', () => {
     expect(typeof media.webSearch).toBe('function');
     expect(typeof media.writeDigest).toBe('function');
@@ -24,8 +24,8 @@ describe('openrouter media seam (shape only)', () => {
 
 describe('cost reporting', () => {
   afterEach(() => vi.unstubAllGlobals());
-  const respond = (body: unknown) =>
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => body })));
+  const respond = (body: unknown, headers: Record<string, string> = {}) =>
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => body, headers: new Headers(headers) })));
 
   test('a missing cost is "not reported" (null), never zero', () => {
     expect(usdToCents(undefined)).toBeNull();
@@ -43,22 +43,38 @@ describe('cost reporting', () => {
     expect(costOr(12, 50)).toBe(12);
   });
 
-  test('submitting a video reports no cost when the provider gives none', async () => {
+  test('submitting a video reports no cost when the proxy gives none', async () => {
     respond({ id: 'job-1', status: 'pending' });
     expect(await media.startVideo('k', 'p')).toEqual({ jobId: 'job-1', cost_cents: null });
   });
 
-  test('a finished video carries the cost the provider reports', async () => {
-    respond({ status: 'completed', unsigned_urls: ['https://cdn/v.mp4'], usage: { cost: 0.42 } });
+  test('asking for a video job goes to the proxy’s /videos route', async () => {
+    const calls: { url: string; body: unknown }[] = [];
+    vi.stubGlobal('fetch', async (url: unknown, init: { body?: string }) => {
+      calls.push({ url: String(url), body: JSON.parse(init.body ?? '{}') });
+      return { ok: true, json: async () => ({ id: 'job-1', status: 'pending' }), headers: new Headers() };
+    });
+    await media.startVideo('k', 'a cat');
+    expect(calls[0].url).toMatch(/\/v1\/videos$/);
+    expect(calls[0].body).toMatchObject({ prompt: 'a cat' });
+  });
+
+  test('a finished video carries the cost the proxy reports in its header', async () => {
+    respond({ status: 'completed' }, { 'x-litellm-response-cost': '0.42' });
     expect(await media.checkVideo('k', 'job-1')).toEqual({
       status: 'done',
-      url: 'https://cdn/v.mp4',
+      url: expect.stringContaining('/v1/videos/job-1/content'),
       cost_cents: 42,
     });
   });
 
-  test('a finished or failed video with no usage reports no cost', async () => {
-    respond({ status: 'completed', unsigned_urls: ['https://cdn/v.mp4'] });
+  test('a proxy that names the clip’s link is followed instead', async () => {
+    respond({ status: 'completed', url: 'https://cdn/v.mp4' });
+    expect((await media.checkVideo('k', 'job-1')).url).toBe('https://cdn/v.mp4');
+  });
+
+  test('a finished or failed video with no reported cost reports none', async () => {
+    respond({ status: 'completed' });
     expect((await media.checkVideo('k', 'job-1')).cost_cents).toBeNull();
     respond({ status: 'failed' });
     expect(await media.checkVideo('k', 'job-1')).toEqual({ status: 'failed', cost_cents: null });

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/agents/openrouter-media', () => ({
+vi.mock('@/lib/agents/ai-media', () => ({
   webSearch: vi.fn(),
   writeDigest: vi.fn(),
   generateImage: vi.fn(),
@@ -15,7 +15,7 @@ vi.mock('@/lib/ai/key-crypto', () => ({
 import { runAgent } from '@/lib/agents/run-agent';
 import { entry, type AgentDefinition } from '@/lib/agents/definition';
 import { z } from 'zod';
-import { webSearch, writeDigest, generateImage, startVideo, suggestProposals } from '@/lib/agents/openrouter-media';
+import { webSearch, writeDigest, generateImage, startVideo, suggestProposals } from '@/lib/agents/ai-media';
 
 const ORG = 'org-xyz';
 

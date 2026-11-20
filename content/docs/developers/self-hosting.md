@@ -26,7 +26,7 @@ Open http://localhost:58272. Sign up to get your own workspace, or press "Try th
 
 Sign-up is confirmed for you locally, so you don't need email to get started. To get password-reset and invite emails, start with `docker compose --profile mail up -d` and read them in the mail viewer at http://localhost:58274.
 
-Every key in `.env` is optional. Add `OPENROUTER_API_KEY` to turn on the AI chat. See [AI models and keys](/docs/developers/ai-models-and-keys).
+Every key in `.env` is optional. Point `LITELLM_BASE_URL` at a LiteLLM proxy and add `LITELLM_API_KEY` to turn on the AI chat. See [AI models and keys](/docs/developers/ai-models-and-keys).
 
 ### Update, stop and wipe
 

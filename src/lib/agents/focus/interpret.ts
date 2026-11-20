@@ -1,4 +1,4 @@
-import { complete as defaultComplete, DIGEST_MODEL } from '@/lib/agents/openrouter-media';
+import { complete as defaultComplete, DIGEST_MODEL } from '@/lib/agents/ai-media';
 import { validatePlan, type FocusMenu, type FocusPlan } from '@/lib/agents/focus/plan';
 
 /** The prompt carries the owner's words and the menu only; never any record data. */

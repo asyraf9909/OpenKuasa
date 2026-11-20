@@ -15,7 +15,7 @@ Anyone reading or changing the code.
 - Next.js 16 (App Router, Turbopack) and React 19. Next.js 16 differs from earlier versions: read `AGENTS.md` before touching its APIs.
 - TypeScript and Tailwind CSS v4, with shadcn/ui components.
 - Supabase (`@supabase/ssr`) for data, sign-in, workspaces and file storage, with row-level security on every table.
-- The AI SDK with OpenRouter for the assistants and agents.
+- The AI SDK with LiteLLM for the assistants and agents.
 - Vitest for tests.
 
 ## The products and their routes

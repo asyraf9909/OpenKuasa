@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
-vi.mock('@/lib/agents/openrouter-media', () => ({ suggestProposals: vi.fn() }));
+vi.mock('@/lib/agents/ai-media', () => ({ suggestProposals: vi.fn() }));
 
 import { entry, type AgentDefinition } from '@/lib/agents/definition';
 import { proposeChanges } from '@/lib/agents/proposer';
-import { suggestProposals } from '@/lib/agents/openrouter-media';
+import { suggestProposals } from '@/lib/agents/ai-media';
 
 /** A service whose decided read answers page by page by `range`; the pending read is empty. */
 function fakeService(decidedPages: { action: string; input: unknown }[][]) {

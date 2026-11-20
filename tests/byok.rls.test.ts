@@ -30,7 +30,7 @@ function client(): SupabaseClient {
 const SEALED_V2 = `v2.${'a'.repeat(16)}.${'b'.repeat(22)}.${'c'.repeat(40)}`;
 const RESEALED_V2 = `v2.${'d'.repeat(16)}.${'e'.repeat(22)}.${'f'.repeat(40)}`;
 const SEALED_V1 = `v1.${'a'.repeat(16)}.${'b'.repeat(22)}.${'c'.repeat(40)}`;
-const HINT = 'sk-or-…cdef';
+const HINT = 'sk-…cdef';
 
 let owner: SupabaseClient;
 let stranger: SupabaseClient;
@@ -128,8 +128,8 @@ testWithService('only a bound-format key with a well-formed hint is stored', asy
     { p_ciphertext: 'x' },
     { p_ciphertext: SEALED_V1 },
     { p_hint: 'h' },
-    { p_hint: 'sk-or-v1-0123456789abcdef' },
-    { p_hint: 'sk-or-…cde' },
+    { p_hint: 'sk-0123456789abcdef' },
+    { p_hint: 'sk-…cde' },
   ]) {
     expect((await store(over)).error?.message, JSON.stringify(over)).toContain('invalid key');
   }
@@ -151,7 +151,7 @@ testWithService('the server may replace the sealed value but not with the earlie
     .eq('org_id', orgId);
   expect(downgrade.error).not.toBeNull();
   // Only the sealed value is writable by the server outside the store function.
-  const hint = await service.from('org_ai_keys').update({ key_hint: 'sk-or-…zzzz' }).eq('org_id', orgId);
+  const hint = await service.from('org_ai_keys').update({ key_hint: 'sk-…zzzz' }).eq('org_id', orgId);
   expect(hint.error).not.toBeNull();
 });
 

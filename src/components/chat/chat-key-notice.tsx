@@ -10,12 +10,11 @@ import {
 import { cn } from '@/lib/utils';
 
 const AI_KEY_HREF = '/account/ai';
-const KEY_GUIDE_HREF = '/docs/getting-started/openrouter-key';
+const KEY_GUIDE_HREF = '/docs/getting-started/ai-key';
 
 const KEY_STEPS = [
-  'Create a free account at openrouter.ai.',
-  'Add a few dollars of credit.',
-  'Create a key.',
+  'Ask whoever runs this OpenKuasa server for an AI key.',
+  'It starts with sk-.',
   'Paste it on the AI key page.',
 ];
 
@@ -91,7 +90,7 @@ export function attachmentRefusal(error: Error | undefined): string | null {
 }
 
 /**
- * The one line every chat shows while the workspace has no OpenRouter key:
+ * The one line every chat shows while the workspace has no AI key:
  * how many free questions are left, and how to get unlimited chat.
  */
 export function ChatKeyNotice({
@@ -131,12 +130,12 @@ export function ChatKeyNotice({
               : ''}
             {status.canManageKey ? (
               <strong className="font-semibold">
-                {status.freeLimit > 0 ? 'Keep chatting' : 'Start chatting'} with your own OpenRouter key
+                {status.freeLimit > 0 ? 'Keep chatting' : 'Start chatting'} with your own AI key
               </strong>
             ) : status.freeLimit > 0 ? (
-              'Ask a workspace owner or admin to add an OpenRouter key to keep chatting.'
+              'Ask a workspace owner or admin to add an AI key to keep chatting.'
             ) : (
-              'Ask a workspace owner or admin to add an OpenRouter key to start chatting.'
+              'Ask a workspace owner or admin to add an AI key to start chatting.'
             )}
           </span>
         </p>
@@ -176,12 +175,12 @@ export function ChatKeyNotice({
         {status.canManageKey ? (
           <>
             <Link href={AI_KEY_HREF} className={linkClass}>
-              Add your OpenRouter key
+              Add your AI key
             </Link>{' '}
             for unlimited chat.
           </>
         ) : (
-          'Ask a workspace owner or admin to add an OpenRouter key for unlimited chat.'
+          'Ask a workspace owner or admin to add an AI key for unlimited chat.'
         )}
       </span>
     </p>

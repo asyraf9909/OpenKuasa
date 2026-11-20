@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/agents/openrouter-media', () => ({ checkVideo: vi.fn() }));
+vi.mock('@/lib/agents/ai-media', () => ({ checkVideo: vi.fn() }));
 vi.mock('@/lib/ai/key-crypto', () => ({
   hasKeySecret: () => true,
   decryptApiKey: (c: string) => `decrypted-${c}`,
 }));
 
 import { pollVideos } from '@/lib/agents/runner';
-import { checkVideo } from '@/lib/agents/openrouter-media';
+import { checkVideo } from '@/lib/agents/ai-media';
 
 const ORG = 'org-1';
 
@@ -261,7 +261,7 @@ describe('pollVideos', () => {
 
   it('keeps going when one asset throws and never leaks error text', async () => {
     vi.mocked(checkVideo)
-      .mockRejectedValueOnce(new Error('boom sk-or-secret'))
+      .mockRejectedValueOnce(new Error('boom sk-secret'))
       .mockResolvedValueOnce({ status: 'failed' });
     const { client, updates } = fakeClient([pendingAsset(), pendingAsset({ id: 'asset-2' })]);
     await pollVideos(client);

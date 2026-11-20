@@ -5,8 +5,8 @@ import { scoreEntry, searchIndex } from '@/lib/docs/search-core';
 
 describe('docs search', () => {
   test('finds the key guide from a natural question', () => {
-    expect(searchDocsPassages('how do I add my openrouter key')[0].url).toMatch(
-      /^\/docs\/getting-started\/openrouter-key/,
+    expect(searchDocsPassages('how do I add my ai key')[0].url).toMatch(
+      /^\/docs\/getting-started\/ai-key/,
     );
   });
   test('empty, stop-word-only and very long queries do not throw', () => {
@@ -21,7 +21,7 @@ describe('docs search', () => {
     }
   });
   test('the browser index carries no body text', () => {
-    expect(JSON.stringify(buildDocsIndex())).not.toContain('openrouter.ai/keys'); // a phrase only in a guide body
+    expect(JSON.stringify(buildDocsIndex())).not.toContain('spending limit on the key where it was made'); // a phrase only in a guide body
   });
   test('index search ranks title above description and respects the limit', () => {
     const index = [

@@ -29,7 +29,7 @@ Lekir can also prepare changes, such as moving an application or adding a candid
 - **Not available yet.** The **AI recruiters** and **Offer-accept rate** cards are not built yet. They say **Not available yet** in your workspace.
 - **No applications yet.** The charts stay empty until your first application arrives.
 - **Couldn't load your hiring data — please refresh.** The numbers could not be read. Refresh the page.
-- **That question was not sent: your free questions are used up.** Without your own AI key, each person gets 3 free questions a week across all the assistants. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+- **That question was not sent: your free questions are used up.** Without your own AI key, each person gets 3 free questions a week across all the assistants. See [Add your AI key](/docs/getting-started/ai-key).
 - **Lekir will not judge on personal traits.** Lekir never weighs race, religion, gender, age, marital status, pregnancy, disability or nationality. If you ask it to filter or rank on these, it declines and offers to look at skills and experience instead.
 - **In the demo,** Lekir gives a sample answer. Sign up for a free account to ask about your own jobs and candidates.
 

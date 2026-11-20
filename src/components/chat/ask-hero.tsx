@@ -459,7 +459,7 @@ function Thread({
       {error && (
         <div className="text-xs text-primary-foreground/80">
           {chatErrorCode(error) === 'key_required'
-            ? 'That question was not sent: your free questions are used up. Add an OpenRouter key to keep chatting.'
+            ? 'That question was not sent: your free questions are used up. Add your AI key to keep chatting.'
             : chatErrorCode(error) === 'no_workspace'
               ? `${persona.name} needs a workspace to look at. Create or join one first.`
               : chatErrorCode(error) === 'daily_limit'

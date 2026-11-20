@@ -15,7 +15,7 @@ The AI chatbot answers your customers' questions on the landing pages you switch
 
 ## Before you start
 
-- The chat on landing pages runs on your workspace's own AI key. Without one, it does not appear. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+- The chat on landing pages runs on your workspace's own AI key. Without one, it does not appear. See [Add your AI key](/docs/getting-started/ai-key).
 - You need at least one landing page to show it on.
 
 ## Steps
@@ -61,9 +61,9 @@ Each answer uses your workspace's AI key. Once the day's answers are used, visit
 
 ## Common problems
 
-- **Web chat** shows **Needs an AI key**: add an OpenRouter key for the workspace.
+- **Web chat** shows **Needs an AI key**: add an AI key for the workspace.
 - **Web chat** shows **Not switched on yet**: tick **Show the AI chatbot on this page** on a landing page.
-- The chat is paused because the OpenRouter key could not be used or has no credit left. Fix the key or top it up, then click **Switch the chat back on**.
+- The chat is paused because the AI key could not be used or has no credit left. Fix the key or top it up, then click **Switch the chat back on**.
 - **A workspace can keep at most 20 entries. Delete one, or add to an existing entry.**: you have 20 entries already.
 - **Keep an entry to 4,000 characters or fewer. Split a longer one in two.**: shorten the entry.
 - **Only an owner or admin can change the daily answers.**: ask an owner or admin.
@@ -73,6 +73,6 @@ Each answer uses your workspace's AI key. Once the day's answers are used, visit
 ## Related
 
 - [Landing pages](/docs/kasturi/landing-pages)
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)
 - [Plugins](/docs/kasturi/plugins)
 - [Kasturi settings](/docs/kasturi/settings)

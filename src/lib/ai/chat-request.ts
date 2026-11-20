@@ -94,7 +94,7 @@ const ATTACHMENT_REFUSALS: Record<AttachmentProblem, { status: number; error: st
   size: { status: 413, error: 'The attached files are too large together. Remove some, or start a new chat.' },
 };
 const FREE_ATTACHMENT_REFUSAL =
-  'A free question can carry one small file (up to 2 MB). Add your OpenRouter key to attach more.';
+  'A free question can carry one small file (up to 2 MB). Add your AI key to attach more.';
 
 // `id` is the chat's id as the client knows it. Only chats that are saved
 // send a UUID; anything else is ignored rather than refused. `pathname` is

@@ -1,12 +1,13 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { encryptApiKey, isOpenRouterKeyShape } from '@/lib/ai/key-crypto';
+import { encryptApiKey, isProviderKeyShape } from '@/lib/ai/key-crypto';
 
 const DIR = join(process.cwd(), 'supabase/migrations');
-const FILE = '20261103110000_ai_key_format_check.sql';
-/** The applied migration whose check could not run; the file above replaces its function. */
+const FILE = '20261202110000_ai_key_litellm_hint.sql';
+/** The applied migration whose check could not run, and the one that fixed it; `FILE` replaces the function both left. */
 const BROKEN = '20261030101500_ai_key_workspace_binding.sql';
+const PREVIOUS = '20261103110000_ai_key_format_check.sql';
 
 // Comments say what the statements must not do; only the statements are checked.
 const statements = (file: string) =>
@@ -68,10 +69,11 @@ describe('workspace AI key format migration', () => {
   const start = code.indexOf('create or replace function public.set_org_ai_key(');
   const fn = code.slice(start, code.indexOf('$$;', start));
 
-  test('is one file, alone on its version, after the migration it corrects', () => {
-    expect(files.filter((f) => f.includes('ai_key_format_check'))).toEqual([FILE]);
+  test('is one file, alone on its version, after every migration it replaces', () => {
+    expect(files.filter((f) => f.includes('ai_key_litellm_hint'))).toEqual([FILE]);
     expect(files.filter((f) => f.startsWith(FILE.slice(0, 14)))).toEqual([FILE]);
     expect(files.indexOf(FILE)).toBeGreaterThan(files.indexOf(BROKEN));
+    expect(files.indexOf(FILE)).toBeGreaterThan(files.indexOf(PREVIOUS));
     // Nothing later defines the function again.
     expect(newestFunctions().get('public.set_org_ai_key')?.file).toBe(FILE);
   });
@@ -81,21 +83,25 @@ describe('workspace AI key format migration', () => {
     expect(fn).toContain(
       String.raw`if (p_ciphertext ~ '^v2\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]{22}\.[A-Za-z0-9_-]+$') is not true`,
     );
-    expect(fn).toMatch(/or length\(p_ciphertext\) > 2000\s+or \(p_hint ~ '\^sk-or-…\[A-Za-z0-9_-\]\{4\}\$'\) is not true then\s+raise exception 'invalid key';/);
+    expect(fn).toMatch(/or length\(p_ciphertext\) > 2000\s+or \(p_hint ~ '\^sk-…\[A-Za-z0-9_-\]\{4\}\$'\) is not true then\s+raise exception 'invalid key';/);
     expect(boundsAbove(code)).toEqual([]);
     expect(code).not.toContain('{1,1900}');
   });
 
-  test('everything else is the function as it was', () => {
-    const before = statements(BROKEN);
-    const from = before.indexOf('create or replace function public.set_org_ai_key(');
-    const old = before.slice(from, before.indexOf('$$;', from));
-    const newCheck = String.raw`[A-Za-z0-9_-]+$') is not true` + '\n     or length(p_ciphertext) > 2000';
-    const oldCheck = String.raw`[A-Za-z0-9_-]{1,1900}$') is not true`;
-    expect(fn.split(newCheck)).toHaveLength(2);
-    // Put the old condition back and the two are the same text, to the character.
-    expect(fn.split(newCheck).join(oldCheck)).toBe(old);
+  test('everything but the hint is the function as the previous migration left it', () => {
+    const previous = statements(PREVIOUS);
+    const from = previous.indexOf('create or replace function public.set_org_ai_key(');
+    const before = previous.slice(from, previous.indexOf('$$;', from));
+    // Put the old hint back and the two are the same text, to the character.
+    const oldHint = String.raw`p_hint ~ '^sk-or-…[A-Za-z0-9_-]{4}$'`;
+    const newHint = String.raw`p_hint ~ '^sk-…[A-Za-z0-9_-]{4}$'`;
+    expect(fn.split(newHint)).toHaveLength(2);
+    expect(fn.split(newHint).join(oldHint)).toBe(before);
     expect(fn).toContain("returns void language plpgsql security definer set search_path = '' as $$");
+    // The broken bound from 20261030101500 is long gone.
+    const broken = statements(BROKEN);
+    expect(fn).not.toContain('{1,1900}');
+    expect(broken).toContain('{1,1900}');
   });
 
   test('only the server may call it, stated again in this file', () => {
@@ -118,17 +124,20 @@ describe('workspace AI key format migration', () => {
     const env = { AI_KEYS_ENCRYPTION_SECRET: 'a-secret-used-only-by-this-test-0123456789' };
     const org = '11111111-1111-4111-8111-111111111111';
 
-    const longest = `sk-or-${'k'.repeat(300)}`;
-    const shortest = `sk-or-${'k'.repeat(16)}`;
-    expect(isOpenRouterKeyShape(longest)).toBe(true);
-    expect(isOpenRouterKeyShape(`${longest}k`)).toBe(false);
-    expect(isOpenRouterKeyShape(shortest)).toBe(true);
+    const longest = `sk-${'k'.repeat(300)}`;
+    const shortest = `sk-${'k'.repeat(16)}`;
+    expect(isProviderKeyShape(longest)).toBe(true);
+    expect(isProviderKeyShape(`${longest}k`)).toBe(false);
+    expect(isProviderKeyShape(shortest)).toBe(true);
+    // The sealed value the app must be able to send is the same whatever the hint says.
+    // v2. + 16 (iv) + . + 22 (tag) + . + base64url of the key's own bytes.
+    const sealedLength = (key: string) => 3 + 16 + 1 + 22 + 1 + Buffer.from(key, 'utf8').toString('base64url').length;
+    expect(encryptApiKey(shortest, org, env)).toHaveLength(sealedLength(shortest));
 
     const sealedLongest = encryptApiKey(longest, org, env);
     const sealedShortest = encryptApiKey(shortest, org, env);
-    // v2. + 16 (iv) + . + 22 (tag) + . + 408 (306 bytes in base64url)
-    expect(sealedLongest).toHaveLength(451);
-    expect(sealedShortest).toHaveLength(43 + 30);
+    expect(sealedLongest).toHaveLength(sealedLength(longest));
+    expect(sealedShortest).toHaveLength(sealedLength(shortest));
     for (const sealed of [sealedLongest, sealedShortest]) {
       expect(shape.test(sealed)).toBe(true);
       expect(sealed.length).toBeLessThanOrEqual(cap);

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const ctl = vi.hoisted(() => ({
   user: { id: 'u1', is_anonymous: false } as { id: string; is_anonymous: boolean } | null,
-  access: { kind: 'byok', apiKey: 'sk-or-workspace' } as
+  access: { kind: 'byok', apiKey: 'sk-workspace' } as
     | { kind: 'byok'; apiKey: string }
     | { kind: 'free'; remaining: number }
     | { kind: 'locked'; status: number; code: string; error: string },
@@ -36,7 +36,7 @@ const quotaCalls = () => ctl.rpcCalls.filter((c) => c.name === 'consume_ai_quota
 
 beforeEach(() => {
   ctl.user = { id: 'u1', is_anonymous: false };
-  ctl.access = { kind: 'byok', apiKey: 'sk-or-workspace' };
+  ctl.access = { kind: 'byok', apiKey: 'sk-workspace' };
   ctl.quota = { data: 10, error: null };
   ctl.quotaThrows = false;
   ctl.rpcCalls = [];
@@ -50,7 +50,7 @@ describe('prepareChat: per-user daily limit on a workspace key', () => {
     expect(quotaCalls()).toEqual([
       { name: 'consume_ai_quota', args: { daily_limit: WORKSPACE_KEY_TURNS_PER_DAY } },
     ]);
-    if (chat.ok) expect(chat.apiKey).toBe('sk-or-workspace');
+    if (chat.ok) expect(chat.apiKey).toBe('sk-workspace');
   });
 
   it('refuses the turn once the caller is over the limit for the day', async () => {

@@ -51,13 +51,13 @@ describe('a sealed key has one purpose', () => {
 
   it('an email key never opens as an AI key, nor an AI key as an email key', () => {
     expect(decryptApiKey(sealEmailKey(KEY, ORG_A), ORG_A, ENV)).toBeNull();
-    expect(decryptApiKey(encryptApiKey('sk-or-v1-abcdefghijklmnop', ORG_A, ENV), ORG_A, ENV, 'org-email-key')).toBeNull();
+    expect(decryptApiKey(encryptApiKey('sk-abcdefghijklmnop', ORG_A, ENV), ORG_A, ENV, 'org-email-key')).toBeNull();
   });
 
   it('AI keys seal and open exactly as before', () => {
-    const sealed = encryptApiKey('sk-or-v1-abcdefghijklmnop', ORG_A, ENV);
-    expect(decryptApiKey(sealed, ORG_A, ENV)).toBe('sk-or-v1-abcdefghijklmnop');
-    expect(decryptApiKey(sealed, ORG_A, ENV, 'org-ai-key')).toBe('sk-or-v1-abcdefghijklmnop');
+    const sealed = encryptApiKey('sk-abcdefghijklmnop', ORG_A, ENV);
+    expect(decryptApiKey(sealed, ORG_A, ENV)).toBe('sk-abcdefghijklmnop');
+    expect(decryptApiKey(sealed, ORG_A, ENV, 'org-ai-key')).toBe('sk-abcdefghijklmnop');
   });
 });
 
@@ -73,11 +73,11 @@ describe('the email settings form', () => {
   });
 
   it('refuses a key that is not a Resend key, without repeating it', () => {
-    expect(isResendKeyShape('sk-or-v1-abcdefghijklmnop')).toBe(false);
+    expect(isResendKeyShape('sk-abcdefghijklmnop')).toBe(false);
     expect(isResendKeyShape('re_short')).toBe(false);
     let message = '';
     try {
-      parseEmailSettings(form({ ...valid, apiKey: 'sk-or-v1-secretsecretsecret' }));
+      parseEmailSettings(form({ ...valid, apiKey: 'sk-secretsecretsecret' }));
     } catch (error) {
       message = (error as Error).message;
     }
@@ -131,7 +131,7 @@ describe('reading a workspace’s email key', () => {
     // Stored against another workspace, or an AI key put in its place.
     expect(await readEmailKey(fakeService(row), ORG_B)).toEqual({ status: 'unusable' });
     expect(
-      await readEmailKey(fakeService({ ...row, ciphertext: encryptApiKey('sk-or-v1-abcdefghijklmnop', ORG_A) }), ORG_A),
+      await readEmailKey(fakeService({ ...row, ciphertext: encryptApiKey('sk-abcdefghijklmnop', ORG_A) }), ORG_A),
     ).toEqual({ status: 'unusable' });
     expect(await readEmailKey(fakeService(null, { code: 'XX000' }), ORG_A)).toEqual({ status: 'error' });
   });

@@ -50,8 +50,8 @@ docker compose up -d
 - Emails are optional. To get password-reset and invite emails, start with
   `docker compose --profile mail up -d` and read them in the mail viewer at
   <http://localhost:58274>. Sign-up and sign-in work without it.
-- Every key in `.env` is optional. Add `OPENROUTER_API_KEY` to turn on the AI
-  chat.
+- Every key in `.env` is optional. Point `LITELLM_BASE_URL` at a LiteLLM
+  proxy and add `LITELLM_API_KEY` to turn on the AI chat.
 - Update: `git pull && docker compose pull && docker compose up -d`
 - Stop: `docker compose down` (keeps your data)
 - Wipe: `docker compose down -v` (deletes all local data)
@@ -99,11 +99,11 @@ under `src/app/(app)/`, written by `pnpm gen:routes` (see
 
 ### What works today
 
-- **Tuah and Sari** — chat on OpenRouter through the Vercel AI SDK. Tuah hands
+- **Tuah and Sari** — chat through LiteLLM with the Vercel AI SDK. Tuah hands
   each question to a specialist per module (`askJebat`, `askKasturi`, …) and
   can read across every module. Reads run on their own; **every change the
   assistant proposes shows an Approve / Reject card and nothing is saved until
-  you approve.** A workspace can bring its own OpenRouter key (stored
+  you approve.** A workspace can bring its own AI key (stored
   encrypted); without one, each signed-up user gets 3 free questions a week.
 - **Jebat** — campaigns, creatives, leads (with stages and promotion to a
   Kasturi contact), public lead forms at `/f/<id>`, appointments and ad
@@ -246,7 +246,7 @@ repository stays available under AGPL-3.0.
 - **shadcn/ui** (Radix primitives, `radix-nova` preset)
 - **Supabase** (`@supabase/ssr`) for data, auth, tenancy and file storage,
   with row-level security on every table
-- **Vercel AI SDK** with **OpenRouter** for the assistants and agents
+- **Vercel AI SDK** with **LiteLLM** for the assistants and agents
 - **Vitest** for tests
 
 ## Getting Started
@@ -262,6 +262,11 @@ cd OpenKuasa
 pnpm install
 pnpm dev
 ```
+
+Use pnpm, not npm: `npm install` stops with `EBADDEVENGINES`, because the
+repository installs with pnpm (`node_modules` is a pnpm symlink farm and the
+lockfile is `pnpm-lock.yaml`). Where you would reach for `npx`, use
+`pnpm exec <tool>` or `pnpm dlx <tool>`.
 
 Open [http://localhost:3000](http://localhost:3000). With no Supabase project
 set, it opens in preview mode on sample data (see below). To use your own
@@ -337,7 +342,7 @@ playwright-core is not a dependency of this repo, so set `PLAYWRIGHT_CORE` to th
 playwright-core package; it drives your installed Chrome (`CHROME_PATH` to change which).
 
 `pnpm eval:tuah` is not part of `pnpm test`. It calls real models and writes
-to a real workspace, so it bills the OpenRouter key; `EVAL_RUNS` sets how many
+to a real workspace, so it bills the LiteLLM key; `EVAL_RUNS` sets how many
 times each case runs (3 by default).
 
 `pnpm smoke:routes` needs a production build, so run `pnpm build` first.

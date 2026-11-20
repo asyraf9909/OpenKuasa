@@ -16,7 +16,7 @@ import { createClient } from '@/lib/supabase/server';
 /**
  * The support page's Live chat: Sari answering "how do I…" questions from the guides only.
  * It holds one tool, the guides search, and sees no workspace data. A workspace with its own
- * OpenRouter key pays for its questions (within the usual daily limit); everyone else gets
+ * AI key pays for its questions (within the usual daily limit); everyone else gets
  * SUPPORT_QUESTION_LIMIT a week on the platform key, apart from the free chat questions.
  */
 

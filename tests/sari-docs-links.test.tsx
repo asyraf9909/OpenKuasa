@@ -4,13 +4,13 @@ import { expect, test } from 'vitest';
 import { withDocsLinks } from '@/components/chat/reply-text';
 
 test('withDocsLinks links guide paths and nothing else', () => {
-  const html = renderToStaticMarkup(<p>{withDocsLinks('Full guide: /docs/getting-started/openrouter-key or https://evil.com', true)}</p>);
-  expect(html).toContain('href="/docs/getting-started/openrouter-key"');
+  const html = renderToStaticMarkup(<p>{withDocsLinks('Full guide: /docs/getting-started/ai-key or https://evil.com', true)}</p>);
+  expect(html).toContain('href="/docs/getting-started/ai-key"');
   expect(html).not.toContain('href="https://evil.com"');
 });
 
 test('withDocsLinks draws no link while links are off (a reply still arriving)', () => {
-  const html = renderToStaticMarkup(<p>{withDocsLinks('Full guide: /docs/getting-started/openrouter-key', false)}</p>);
+  const html = renderToStaticMarkup(<p>{withDocsLinks('Full guide: /docs/getting-started/ai-key', false)}</p>);
   expect(html).not.toContain('<a');
 });
 

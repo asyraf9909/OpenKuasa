@@ -30,7 +30,7 @@ The Receipts Inbox holds the photos and PDFs of receipts you upload. You check e
 
 ### Read a receipt with AI
 
-You can have an AI model fill in the vendor, date, amount and SST for you to check. This uses your workspace's own AI key and its credit. The free chat questions are not used for receipts. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+You can have an AI model fill in the vendor, date, amount and SST for you to check. This uses your workspace's own AI key and its credit. The free chat questions are not used for receipts. See [Add your AI key](/docs/getting-started/ai-key).
 
 1. On a receipt that is **To review**, choose **Read with AI**.
 2. Read what will be sent, then click **Send to be read**.

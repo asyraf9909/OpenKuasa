@@ -3,7 +3,7 @@
  * (yet) said. Deliberately on the high side: an estimate is what the spend caps see
  * until a real figure replaces it, so it must not flatter the run.
  *
- * Kept apart from the media seam (openrouter-media.ts) because tests replace that
+ * Kept apart from the media seam (ai-media.ts) because tests replace that
  * whole module, and these numbers are part of the budget logic under test.
  */
 
@@ -15,7 +15,7 @@ export const IMAGE_ESTIMATE_CENTS = 5;
 export const VIDEO_ESTIMATE_CENTS = 50;
 
 /**
- * OpenRouter reports cost in USD credits. Whole cents, rounded up, because
+ * LiteLLM reports what a call cost in USD (`x-litellm-response-cost`). Whole cents, rounded up, because
  * `cost_cents` columns are INTEGER; `null` when the provider gave no figure, which
  * is not the same as a reported cost of zero.
  */

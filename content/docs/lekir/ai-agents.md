@@ -15,7 +15,7 @@ Lekir's AI agent checks your hiring on a schedule and suggests notes for you to 
 
 ## Before you start
 
-The agent runs on your workspace's own AI key. If there is none, the screen shows **Add an OpenRouter key**. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+The agent runs on your workspace's own AI key. If there is none, the screen shows **Add your AI key**. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 

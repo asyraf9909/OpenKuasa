@@ -51,13 +51,6 @@ export function receiptModelId(env: EnvLike = process.env): string | null {
 
 /** How long a reading may take before it counts as failed. */
 export const RECEIPT_READ_TIMEOUT_MS = 45_000;
-/**
- * How OpenRouter reads a PDF. `native` is the model's own PDF input and costs only the model's tokens. The others
- * (`mistral-ocr`, and `pdf-text`) are OpenRouter's own parsers, one of which is billed per page to the account even
- * when the model is free; OpenRouter picks one of them when a model has no PDF input and none is named. Naming this
- * one means a model that cannot take a PDF answers with an error instead (see `unsupported`), and nothing is billed.
- */
-export const RECEIPT_PDF_ENGINE = 'native';
 /** The most a reading may say back: five short fields. */
 export const RECEIPT_READ_MAX_OUTPUT_TOKENS = 300;
 /** How long fetching the stored file may take. */
@@ -280,10 +273,6 @@ export async function readReceiptWithModel(input: {
         },
       ],
       output: Output.object({ schema: receiptReadingSchema }),
-      // Only a PDF has a parser to choose, and it is never a paid one.
-      ...(input.mediaType === 'application/pdf'
-        ? { providerOptions: { openrouter: { plugins: [{ id: 'file-parser', pdf: { engine: RECEIPT_PDF_ENGINE } }] } } }
-        : {}),
       maxOutputTokens: RECEIPT_READ_MAX_OUTPUT_TOKENS,
       // One press is one call: a retry would spend the workspace's credit twice without the person asking.
       maxRetries: 0,

@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/lib/agents/run-agent', () => ({
   runAgent: vi.fn(async () => ({ runId: 'r1', status: 'done' })),
 }));
-vi.mock('@/lib/agents/openrouter-media', () => ({ checkVideo: vi.fn() }));
+vi.mock('@/lib/agents/ai-media', () => ({ checkVideo: vi.fn() }));
 vi.mock('@/lib/ai/key-crypto', () => ({ hasKeySecret: () => true, decryptApiKey: () => 'k' }));
 
 import { runSchedules, startRefusal } from '@/lib/agents/runner';
@@ -444,7 +444,7 @@ describe('runSchedules', () => {
   });
 
   it('keeps looping when one schedule throws', async () => {
-    vi.mocked(runAgent).mockRejectedValueOnce(new Error('boom sk-or-secret'));
+    vi.mocked(runAgent).mockRejectedValueOnce(new Error('boom sk-secret'));
     const { client } = fakeClient([sched({ id: 's1' }), sched({ id: 's2', org_id: 'org-2' })]);
     const out = await runSchedules(client);
     expect(runAgent).toHaveBeenCalledTimes(2);

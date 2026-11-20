@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
-vi.mock('@/lib/agents/openrouter-media', () => ({ suggestProposals: vi.fn() }));
+vi.mock('@/lib/agents/ai-media', () => ({ suggestProposals: vi.fn() }));
 
 import { proposeChanges, type Candidate } from '@/lib/agents/proposer';
 import { entry, type AgentDefinition } from '@/lib/agents/definition';
 import { reachAgent } from '@/lib/agents/reach-agent';
-import { suggestProposals } from '@/lib/agents/openrouter-media';
+import { suggestProposals } from '@/lib/agents/ai-media';
 
 const LEAD_ID = '11111111-1111-4111-8111-111111111111';
 const lead = (over: Partial<Record<string, unknown>> = {}) =>

@@ -10,7 +10,7 @@ export function ConnectionRows({ connections }: { connections: CrmConnections })
   return (
     <ul className="space-y-1">
       <StatusRow
-        label="AI key (OpenRouter)"
+        label="AI key"
         value={hasAiKey ? 'Set' : 'Not set'}
         on={hasAiKey}
         href="/account/ai"

@@ -79,7 +79,7 @@ vi.mock('@/lib/supabase/server', () => ({
     auth: { getUser: async () => ({ data: { user: ctl.user }, error: null }) },
     rpc: async (name: string) => {
       if (name === 'org_ai_key_status') {
-        return { data: ctl.sealedKey ? [{ key_hint: 'sk-or-…aaaa' }] : [], error: null };
+        return { data: ctl.sealedKey ? [{ key_hint: 'sk-…aaaa' }] : [], error: null };
       }
       if (name === 'consume_free_question') {
         ctl.freeConsumed += 1;
@@ -164,7 +164,7 @@ const KEY_ORG = '11111111-1111-4111-8111-111111111111';
 /** Stores a key sealed for the caller's workspace, as the server does. */
 const sealForWorkspace = () => {
   ctl.org = { orgId: KEY_ORG, role: 'owner' };
-  return encryptApiKey('sk-or-v1-workspace-key-aaaaaaaaaaaa', KEY_ORG);
+  return encryptApiKey('sk-workspace-key-aaaaaaaaaaaa', KEY_ORG);
 };
 const { HIRE_TOOL_NAMES } = await import('@/lib/ai/hire-tools');
 const { HIRE_WRITE_TOOL_NAMES } = await import('@/lib/ai/products');
@@ -366,7 +366,7 @@ describe('POST /api/hire/chat happy path', () => {
     await res.text();
     expect(ctl.freeConsumed).toBe(0);
     expect(ctl.dailyConsumed).toBe(1);
-    expect(ctl.usedKeys).toEqual(['sk-or-v1-workspace-key-aaaaaaaaaaaa']);
+    expect(ctl.usedKeys).toEqual(['sk-workspace-key-aaaaaaaaaaaa']);
   });
 });
 

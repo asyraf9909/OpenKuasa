@@ -15,7 +15,7 @@ In the demo, Tuah gives sample answers and nothing is saved.
 
 ## Before you start
 
-Without an OpenRouter key, each person gets 3 free questions a week. They come back every Monday at 8 am Malaysia time (midnight UTC). To chat without that limit, an owner or admin adds a key. See [Add your OpenRouter key](/docs/getting-started/openrouter-key).
+Without an AI key, each person gets 3 free questions a week. They come back every Monday at 8 am Malaysia time (midnight UTC). To chat without that limit, an owner or admin adds a key. See [Add your AI key](/docs/getting-started/ai-key).
 
 ## Steps
 
@@ -34,7 +34,7 @@ Tuah replies in the language you write in, English or Bahasa Malaysia. Under the
 
 ## Common problems
 
-- **The box is greyed out and says "Add an OpenRouter key to keep chatting".** Your free questions for the week are used up. An owner or admin can add a key, or you can wait for next week.
+- **The box is greyed out and says "Add an AI key to keep chatting".** Your free questions for the week are used up. An owner or admin can add a key, or you can wait for next week.
 - **"That question was not sent: you have reached today's chat limit."** On a workspace key, each person has a daily limit. It resets at midnight UTC (8 am Malaysia time).
 - **"Tuah could not respond just now. Please try again."** Something went wrong on the way. Ask again.
 - **"This question did not get an answer. Ask it again to try once more."** The answer never arrived. Send the question again.
@@ -44,4 +44,4 @@ Tuah replies in the language you write in, English or Bahasa Malaysia. Under the
 - [Approve or reject a change](/docs/tuah/approve-changes)
 - [Send files with a question](/docs/tuah/attach-files)
 - [Find, rename and delete your chats](/docs/tuah/chat-history)
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/agents/openrouter-media', () => ({
+vi.mock('@/lib/agents/ai-media', () => ({
   webSearch: vi.fn(),
   writeDigest: vi.fn(),
   generateImage: vi.fn(),
@@ -37,7 +37,7 @@ import {
   suggestProposals,
   webSearch,
   writeDigest,
-} from '@/lib/agents/openrouter-media';
+} from '@/lib/agents/ai-media';
 
 const ORG = 'org-123';
 
@@ -198,7 +198,7 @@ describe('runWeeklyStudio', () => {
   });
 
   it('marks the run failed with a safe error when a media call throws', async () => {
-    vi.mocked(webSearch).mockRejectedValue(new Error('boom sk-or-secret'));
+    vi.mocked(webSearch).mockRejectedValue(new Error('boom sk-secret'));
     const { service, runs } = fakeService({ ciphertext: 'abc' });
     const res = await runWeeklyStudio(service, ORG, 'manual');
     expect(res.status).toBe('failed');
@@ -233,7 +233,7 @@ describe('runWeeklyStudio', () => {
 
   it('a run that fails part-way keeps the cost of the steps already paid for', async () => {
     vi.mocked(webSearch).mockResolvedValue({ text: 'angle', cost_cents: 3 });
-    vi.mocked(writeDigest).mockRejectedValue(new Error('boom sk-or-secret'));
+    vi.mocked(writeDigest).mockRejectedValue(new Error('boom sk-secret'));
     const { service, runs } = fakeService({ ciphertext: 'abc' });
     const res = await runWeeklyStudio(service, ORG, 'manual');
     expect(res.status).toBe('failed');
@@ -358,7 +358,7 @@ describe('runWeeklyStudio', () => {
   it('does not fail the run when the video kick-off throws', async () => {
     vi.mocked(webSearch).mockResolvedValue({ text: 'a', cost_cents: 3 });
     vi.mocked(writeDigest).mockResolvedValue({ text: 'd', cost_cents: 4 });
-    vi.mocked(startVideo).mockRejectedValue(new Error('boom sk-or-secret'));
+    vi.mocked(startVideo).mockRejectedValue(new Error('boom sk-secret'));
     const { service, runs, assets } = fakeService({ ciphertext: 'abc' });
     const res = await runWeeklyStudio(service, ORG, 'manual');
     expect(res.status).toBe('done');
@@ -369,7 +369,7 @@ describe('runWeeklyStudio', () => {
   it('records a failed asset (no secret) when an image fails and keeps the run done', async () => {
     vi.mocked(webSearch).mockResolvedValue({ text: 'a', cost_cents: 1 });
     vi.mocked(writeDigest).mockResolvedValue({ text: 'd', cost_cents: 1 });
-    vi.mocked(generateImage).mockRejectedValue(new Error('boom sk-or-secret'));
+    vi.mocked(generateImage).mockRejectedValue(new Error('boom sk-secret'));
     const { service, runs, assets } = fakeService({ ciphertext: 'abc' });
     const res = await runWeeklyStudio(service, ORG, 'manual');
     expect(res.status).toBe('done');
@@ -397,7 +397,7 @@ describe('runWeeklyStudio', () => {
   it('keeps the digest and a done run when the proposer throws', async () => {
     vi.mocked(webSearch).mockResolvedValue({ text: 'a', cost_cents: 1 });
     vi.mocked(writeDigest).mockResolvedValue({ text: '# D', cost_cents: 1 });
-    vi.mocked(suggestProposals).mockRejectedValue(new Error('boom sk-or-secret'));
+    vi.mocked(suggestProposals).mockRejectedValue(new Error('boom sk-secret'));
     const { service, runs } = fakeService({ ciphertext: 'abc' });
     const res = await runWeeklyStudio(service, ORG, 'manual');
     expect(res.status).toBe('done');

@@ -156,8 +156,8 @@ export function readingQuestion(
   const what = size === '—' ? `this file (${INBOX_TYPE_LABELS[row.mime_type]})` : `this file (${INBOX_TYPE_LABELS[row.mime_type]}, ${size})`;
   const lines = [
     row.mime_type === 'application/pdf'
-      ? `Send ${what} to be read? The whole file, as it is, with everything inside it, goes to OpenRouter, your workspace’s AI provider, and on to the AI model that reads it.`
-      : `Send ${what} to be read? The whole file, with anything a phone wrote into it such as where the photo was taken, goes to OpenRouter, your workspace’s AI provider, and on to the AI model that reads it.`,
+      ? `Send ${what} to be read? The whole file, as it is, with everything inside it, goes to your workspace’s AI server and on to the AI model that reads it.`
+      : `Send ${what} to be read? The whole file, with anything a phone wrote into it such as where the photo was taken, goes to your workspace’s AI server and on to the AI model that reads it.`,
     'It is read on your workspace’s own AI key and uses that key’s credit. Your workspace’s expense category names, up to sixty of them, are sent with it, so that one can be suggested. Nothing else from your workspace is sent, and the file’s name is not sent.',
     'What comes back fills the vendor, date, amount and SST boxes as a suggestion, and may suggest a category. Nothing is saved to an expense or a bill until you check the figures and choose to.',
   ];

@@ -85,4 +85,4 @@ The person who created the workspace is its owner. The owner role cannot be give
 
 - [Join a workspace from an invite](/docs/getting-started/join-a-workspace)
 - [Fill in your company details](/docs/getting-started/company-details)
-- [Add your OpenRouter key](/docs/getting-started/openrouter-key)
+- [Add your AI key](/docs/getting-started/ai-key)
