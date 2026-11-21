@@ -28,17 +28,19 @@ describe('docker-compose.yml', () => {
     for (const ref of found) expect(ref).toMatch(/^\$\{OPENKUASA_IMAGE_TAG(:-[^}]*)?\}$/);
   });
 
-  it('publishes the agreed ports on 127.0.0.1 only, and nothing on 543xx', () => {
+  it('publishes the app on every interface, the rest on 127.0.0.1 only, and nothing on 543xx', () => {
     const text = compose();
-    expect(text).toContain('"127.0.0.1:58272:3000"');
+    expect(text).toContain('"58272:3000"');
     expect(text).toContain('"127.0.0.1:58273:8000"');
     expect(text).toContain('"127.0.0.1:58274:8025"');
     expect(text).not.toMatch(/543\d\d/);
   });
 
-  it('never publishes a port on every interface', () => {
-    // Every entry under a `ports:` key must be bound to 127.0.0.1, so nobody
-    // on the same network can reach the app, the gateway or the caught emails.
+  it('never publishes the gateway or the caught emails on every interface', () => {
+    // The app is published on every interface so a reverse proxy in another
+    // container can reach it (Nginx Proxy Manager -> host.docker.internal:58272).
+    // Everything else stays on 127.0.0.1: nobody on the same network may reach
+    // Kong directly or read the caught emails.
     const lines = compose().split('\n');
     const published: string[] = [];
     lines.forEach((line, i) => {
@@ -53,7 +55,7 @@ describe('docker-compose.yml', () => {
       }
     });
     expect(published).toHaveLength(3);
-    for (const entry of published) expect(entry).toMatch(/^"127\.0\.0\.1:\d+:\d+"$/);
+    expect(published.filter((entry) => !entry.startsWith('"127.0.0.1:'))).toEqual(['"58272:3000"']);
   });
 
   it('keeps the mail viewer and its template server optional', () => {

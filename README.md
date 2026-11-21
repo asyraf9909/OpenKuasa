@@ -67,6 +67,7 @@ one-time Supabase Auth settings: [Run your own copy](https://openkuasa.com/docs/
 ### Troubleshooting
 
 - **Port already in use.** The app uses ports 58272 and 58273 (and 58274 with the mail viewer). On macOS these sit in a range the system lends out briefly to other apps, so another app can hold one now and then. Find it with `lsof -i :58273` (swap in the port from the error). Quit that app or restart the Mac, then run `docker compose up -d` again.
+- **Putting it behind a domain.** Port 58272 is published on every interface, so a reverse proxy in another container can reach the app at `http://host.docker.internal:58272` (Linux: the Docker bridge address, or `network_mode: host`). Ports 58273 and 58274 stay on `127.0.0.1` on purpose: the gateway and the caught emails are not meant to be reachable from your network. For a domain, also run the single-port setup in [Run your own copy](https://openkuasa.com/docs/developers/self-hosting) so sign-in goes through the proxy too, and set `OPENKUASA_PUBLIC_URL` to the exact address people open, with no trailing slash.
 - **Docker isn't running.** Start Docker Desktop and wait until it says it is running.
 - **"dependency failed to start", or the page never loads.** Run `docker compose logs migrate` (or `docker compose logs init`) to see why. Fix it, then run `docker compose up -d` again. It carries on from where it stopped.
 - **Start over completely.** Run `docker compose down -v`. This deletes all local data. Then run `docker compose up -d`.
