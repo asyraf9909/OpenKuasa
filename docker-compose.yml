@@ -329,7 +329,11 @@ services:
       OPENKUASA_DEMO_ENABLED: "1"
       POSTGRES_HOST: db
     ports:
-      - "127.0.0.1:58272:3000"
+      # On every interface, so a reverse proxy running in another container
+      # (Nginx Proxy Manager and the like) can reach the app at
+      # host.docker.internal:58272. Anyone who can reach this machine's port
+      # 58272 can open the app, so put a firewall or the proxy in front of it.
+      - "58272:3000"
     volumes:
       - secrets:/secrets:ro
 
