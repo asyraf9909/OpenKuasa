@@ -38,6 +38,7 @@ import { ASSISTANT } from '@/config/nav';
 import { ReplyCard, type CardType } from '@/components/command/reply-cards';
 import { useViewer } from '@/components/app/viewer-context';
 import { tuahHomeHeading } from '@/lib/chat/greeting';
+import { newId } from '@/lib/ids';
 import { GreetingHeading } from '@/components/chat/greeting-heading';
 import { useGreetingWeather } from '@/components/chat/use-greeting-weather';
 import type { ServerGreeting } from '@/lib/greeting/types';
@@ -242,7 +243,7 @@ const ANSWER_POLL_TRIES = 30;
 const shownLists = new WeakSet<ChatThread[]>();
 
 function freshSession(): Session {
-  const id = crypto.randomUUID();
+  const id = newId();
   return { id, status: 'ready', chat: createChat(id), saved: false, answer: 'settled' };
 }
 

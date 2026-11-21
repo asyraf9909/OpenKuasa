@@ -6,6 +6,7 @@
  * upload queue. Pure, with no server imports: the browser runs these before
  * an upload and the server runs the same ones again before it opens a file.
  */
+import { newId } from '@/lib/ids';
 import { INBOX_RECEIPT_MAX_BYTES, INBOX_RECEIPT_TYPES, type InboxReceiptType } from './receipts';
 
 export const RECEIPT_FILE_MESSAGES = {
@@ -102,7 +103,7 @@ const EXTENSIONS = Object.values(INBOX_RECEIPT_TYPES).join('|');
 const INBOX_RECEIPT_PATH = new RegExp(`^(${UUID})/${UUID}\\.(${EXTENSIONS})$`);
 
 /** `<workspace id>/<random uuid>.<ext>`. The uuid is made here, by whoever uploads; the name of the file is never in it. */
-export function inboxReceiptPath(orgId: string, type: InboxReceiptType, uuid: string = crypto.randomUUID()): string {
+export function inboxReceiptPath(orgId: string, type: InboxReceiptType, uuid: string = newId()): string {
   return `${orgId.toLowerCase()}/${uuid.toLowerCase()}.${INBOX_RECEIPT_TYPES[type]}`;
 }
 

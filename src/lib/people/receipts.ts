@@ -9,6 +9,7 @@
  * Nothing here logs a file name or a storage path: a path begins with a user id.
  */
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { newId } from '@/lib/ids';
 import { type CapResult, refuse } from './capabilities';
 
 export const RECEIPT_BUCKET = 'hr-receipts';
@@ -64,7 +65,7 @@ export function receiptProblem(file: { type: string; size: number; name?: string
 /** `<user id>/<random uuid>.<ext>`: the folder is the uploader's own, which is all the bucket lets them write to. */
 export function receiptPath(userId: string, mediaType: string): string {
   if (!Object.hasOwn(RECEIPT_TYPES, mediaType)) throw new Error('Not a receipt type.');
-  return `${userId}/${crypto.randomUUID()}.${RECEIPT_TYPES[mediaType]}`;
+  return `${userId}/${newId()}.${RECEIPT_TYPES[mediaType]}`;
 }
 
 /**
