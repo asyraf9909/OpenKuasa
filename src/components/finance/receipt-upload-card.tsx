@@ -17,6 +17,7 @@ import {
   retryPlan,
   tooManyLeftOut,
 } from '@/lib/finance/receipt-files';
+import { newId } from '@/lib/ids';
 import { RECEIPT_INBOX_MESSAGES } from '@/lib/finance/receipt-inbox';
 import { fileSizeLabel } from '@/lib/finance/receipt-views';
 import type { FinResult } from '@/lib/finance/result';
@@ -129,7 +130,7 @@ export function ReceiptUploadCard({
 
   const add = (picked: File[]) => {
     if (picked.length === 0) return;
-    const entries = picked.map((file) => ({ key: crypto.randomUUID(), file }));
+    const entries = picked.map((file) => ({ key: newId(), file }));
     const next = queueAdd(
       queue.current,
       entries.map((e) => ({ key: e.key, name: e.file.name, size: e.file.size })),

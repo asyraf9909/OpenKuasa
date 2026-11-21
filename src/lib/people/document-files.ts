@@ -7,6 +7,7 @@
  * Nothing here logs a file name or a storage path.
  */
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { newId } from '@/lib/ids';
 import { type CapResult, refuse } from './capabilities';
 import type { Converted } from './document-forms';
 import { receiptMediaType } from './receipts';
@@ -84,7 +85,7 @@ export const isDocumentPathShape = (path: string): boolean => DOCUMENT_PATH.test
 export function documentPath(orgId: string, employeeId: string, file: File): string {
   const type = documentMediaType(file);
   if (!Object.hasOwn(DOCUMENT_FILE_TYPES, type)) throw new Error('Not a document type.');
-  return `${orgId.toLowerCase()}/${employeeId.toLowerCase()}/${crypto.randomUUID()}.${DOCUMENT_FILE_TYPES[type]}`;
+  return `${orgId.toLowerCase()}/${employeeId.toLowerCase()}/${newId()}.${DOCUMENT_FILE_TYPES[type]}`;
 }
 
 /** True when `path` has the exact shape and sits in this workspace's folder, in this employee's folder. */

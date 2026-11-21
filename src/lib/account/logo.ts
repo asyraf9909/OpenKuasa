@@ -11,6 +11,7 @@
  */
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { type CapResult, refuse } from '@/lib/people/capabilities';
+import { newId } from '@/lib/ids';
 import { LOGO_EXTENSION, LOGO_HEAD_BYTES, LOGO_MAX_BYTES, LOGO_TYPES, logoTypeOfBytes } from './logo-bytes';
 import { LOGO_NOT_IMAGE, LOGO_TOO_BIG, LOGO_UPLOAD_FAILED } from './logo-refusals';
 
@@ -63,7 +64,7 @@ export async function prepareLogoFile(file: File): Promise<Converted<File>> {
 export function logoPath(orgId: string, file: File): string {
   const type = typeOf(file);
   if (!Object.hasOwn(EXTENSION_OF, type)) throw new Error('Not a logo type.');
-  return `${orgId.toLowerCase()}/${crypto.randomUUID()}.${EXTENSION_OF[type]}`;
+  return `${orgId.toLowerCase()}/${newId()}.${EXTENSION_OF[type]}`;
 }
 
 /**
